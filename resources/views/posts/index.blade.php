@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('pageTitle')
-    Hello World | @parent
+    Welcome | @parent
 @stop
 
 @section('content')

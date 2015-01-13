@@ -18,7 +18,17 @@ class Comment extends PresentableSoftDeleteModel {
      *
      * @var array
      */
-    protected $fillable = ['comment'];
+    protected $fillable = ['comment', 'post_id', 'parent_id'];
+
+    /**
+     * Return all reply comments.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function replies()
+    {
+        return $this->hasMany( static::class, 'parent_id')->with('replies');
+    }
 
     /**
      * Return the post that the comment was made towards.

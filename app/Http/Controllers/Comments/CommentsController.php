@@ -1,24 +1,27 @@
-<?php namespace App\Http\Controllers\Users;
+<?php namespace App\Http\Controllers\Comments;
 
+use App\Comments\CommentRepositoryInterface;
 use App\Http\Requests;
-use App\Users\UserRepositoryInterface;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\CommentFormRequest;
 
-class UsersController extends Controller {
-
-    /**
-     * @var \App\Users\UserRepositoryInterface
-     */
-    private $userRepository;
+class CommentsController extends Controller {
 
     /**
-     * Create new UsersController instance.
+     * The comment repository implementation.
      *
-     * @param UserRepositoryInterface $userRepository
+     * @var \App\Comments\CommentRepositoryInterface
      */
-    public function __construct( UserRepositoryInterface $userRepository )
+    private $commentRepository;
+
+    /**
+     * Create new CommentsController instance.
+     *
+     * @param CommentRepositoryInterface $commentRepository
+     */
+    public function __construct( CommentRepositoryInterface $commentRepository )
     {
-        $this->userRepository = $userRepository;
+        $this->commentRepository = $commentRepository;
     }
 
     /**
@@ -44,11 +47,23 @@ class UsersController extends Controller {
     /**
      * Store a newly created resource in storage.
      *
+     * @param CommentFormRequest $request
+     *
      * @return Response
      */
-    public function store()
+    public function store( CommentFormRequest $request )
     {
+        // Define the attributes that we want to insert into the record.
         //
+        $attributes = $request->only('comment', 'post_id', 'parent_id');
+
+        // Create a new comment record.
+        //
+        $this->commentRepository->createRecord( $attributes );
+
+        // Redirect the user back to the page.
+        //
+        return redirect()->back()->withCommentAdded(true);
     }
 
     /**
@@ -60,13 +75,7 @@ class UsersController extends Controller {
      */
     public function show( $id )
     {
-        // Fetch the user record from the database.
         //
-        $user = $this->userRepository->findByUsername( $id );
-
-        // Show the page.
-        //
-        return routeView()->withUser( $user );
     }
 
     /**

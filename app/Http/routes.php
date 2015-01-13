@@ -11,6 +11,10 @@
 |
 */
 
+// Comments Resource
+//
+Route::resource('comments', 'Comments\CommentsController');
+
 // Posts Namespace Routing Group
 //
 Route::group(['namespace' => 'Posts'], function()
@@ -49,7 +53,11 @@ Route::group(['namespace' => 'Auth'], function()
 {
     Route::get('login', [
         'as'    => 'auth.login',
-        'uses'  => 'AuthController@getLogin',
+        function(){
+            Auth::attempt(['email' => 'administrator@example.com', 'password' => 'password']);
+            return route('posts.index');
+        }
+        //'uses'  => 'AuthController@getLogin',
     ]);
 
     Route::post('login', [

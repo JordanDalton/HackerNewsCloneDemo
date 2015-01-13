@@ -45,6 +45,16 @@ class UserPresenter extends BasePresenter {
     }
 
     /**
+     * Return the link to the users profile.
+     *
+     * @return string
+     */
+    public function getProfileLink()
+    {
+        return route('users.show', $this->getWrappedObject()->id);
+    }
+
+    /**
      * Return the username of the user.
      *
      * @return username

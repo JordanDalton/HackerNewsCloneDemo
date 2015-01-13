@@ -1,10 +1,10 @@
 <?php namespace App\Http\Controllers\Posts;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\EditPostFormRequest;
 use App\Http\Requests\PostFormRequest;
 use App\Posts\PostRepositoryInterface;
+use Illuminate\Routing\Controller;
 
 class PostsController extends Controller {
 
@@ -100,7 +100,7 @@ class PostsController extends Controller {
     {
         // Fetch the post record from the database.
         //
-        $post = $this->postRepository->findById( $id );
+        $post = $this->postRepository->findByIdWithUserAndComments( $id );
 
         // Show the page.
         //

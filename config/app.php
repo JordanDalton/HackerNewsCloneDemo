@@ -135,14 +135,17 @@ return [
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
+        'Illuminate\Html\HtmlServiceProvider',
 
 		/*
 		 * Application Service Providers...
 		 */
 		'App\Providers\AppServiceProvider',
 		'App\Providers\BusServiceProvider',
+        'App\Providers\ComposerServiceProvider',
 		'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
+        'App\Providers\ObserverServiceProvider',
 		'App\Providers\RouteServiceProvider',
 
         /*
@@ -195,6 +198,8 @@ return [
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
 
+        'Form'      => 'Illuminate\Html\FormFacade',
+        'Html'      => 'Illuminate\Html\HtmlFacade'
 	],
 
 ];

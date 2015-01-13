@@ -35,6 +35,17 @@ class Post extends PresentableSoftDeleteModel {
     }
 
     /**
+     * Return all comments that are made directory towards the creator
+     * of the post, not replies to comments.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function parentComments()
+    {
+        return $this->comments()->whereNull('parent_id');
+    }
+
+    /**
      * Return the record of the user that submitted the item.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
