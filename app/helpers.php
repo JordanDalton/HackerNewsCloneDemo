@@ -1,6 +1,22 @@
 <?php
 
 /**
+ * A defined list of usernames that we will not allowed to be registered.
+ *
+ * @return array
+ */
+function disallowedUsernameList()
+{
+    return [
+        'admin',
+        'administrator',
+        'customerservice',
+        'customer_service',
+        'support'
+    ];
+}
+
+/**
  * If a particular form field has a known error we will
  * return a string that will represent a error field.
  *
@@ -12,6 +28,20 @@
 function hasError( $name , Illuminate\Support\ViewErrorBag $errors )
 {
     return $errors->has( $name ) ? 'has-error' : '#';
+}
+
+/**
+ * Determine of if a specified route is currently be viewed.
+ *
+ * @param string $routeName The dot notational route name.
+ * @param string $trueReturn The value we want returned if there is a match.
+ * @param string $falseReturn The value we want returnd if there is NOT a match.
+ *
+ * @return string
+ */
+function isActiveRouteName( $routeName , $trueReturn = 'active' , $falseReturn = '#' )
+{
+    return Route::currentRouteName() === $routeName ? $trueReturn : $falseReturn;
 }
 
 /**

@@ -128,6 +128,7 @@ class CommentsTableSeeder extends Seeder {
                 'comment'    => $this->faker->sentence(),
                 'post_id'    => $this->faker->randomElement( $user_ids ) ,
                 'user_id'    => $this->faker->randomElement( $user_ids ) ,
+                'votes'      => $this->faker->randomDigitNotNull
             ];
         }
     }

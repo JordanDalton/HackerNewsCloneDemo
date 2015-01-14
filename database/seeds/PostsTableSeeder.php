@@ -98,12 +98,17 @@ class PostsTableSeeder extends Seeder {
         //
         foreach ( range( 1 , 20 ) as $index )
         {
+            $ask = $this->faker->boolean();
+
             $this->posts[ ] = [
+                'ask'        => $ask,
                 'created_at' => new DateTime ,
+                'show'       => $ask ? false : $this->faker->boolean(),
                 'text'       => $this->faker->text ,
                 'title'      => $this->faker->sentence( 4 ) ,
-                'url'        => $this->faker->url ,
-                'user_id'    => $this->faker->randomElement( $user_ids )
+                'url'        => $ask ? null : $this->faker->url ,
+                'user_id'    => $this->faker->randomElement( $user_ids ),
+                'votes'      => $this->faker->randomDigitNotNull
             ];
         }
     }

@@ -12,8 +12,17 @@
         <!-- .col-lg-12 -->
         <div class="col-lg-12">
             <div class="page-header">
-                <h1><a href="{{ $post->getUrl() }}" target="_blank">Test</a> <small>({{ $post->getUrlDomain() }})</small></h1>
+                <h1><a href="{{ $post->getPostUrl() }}" target="_blank">{{ $post->getTitle() }}</a>
+                    @if( $post->hasUrl() )
+                        <small>({{ $post->getUrlDomain() }})</small>
+                    @endif
+                </h1>
                 <p>768 points by <a class="underlined" href="{{ $post->getLinkToPostersProfile() }}">{{ $post->getUsernameOfPoster() }}</a> {{ $post->getDurationSinceCreated() }} | <a class="underlined" href="{{ $post->getLinkToPost() }}">{{ $post->getCommentsCountOrDiscuss() }}</a></p>
+                @if( $post->hasText() )
+                    <blockquote>
+                        {!! $post->getText() !!}
+                    </blockquote>
+                @endif
             </div>
 
             @if( Auth::check())

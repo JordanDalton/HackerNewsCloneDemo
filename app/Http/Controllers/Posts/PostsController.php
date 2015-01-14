@@ -3,7 +3,9 @@
 use App\Http\Requests;
 use App\Http\Requests\EditPostFormRequest;
 use App\Http\Requests\PostFormRequest;
+use App\Http\Requests\VoteFormRequest;
 use App\Posts\PostRepositoryInterface;
+use App\Votes\VoteRepositoryInterface;
 use Illuminate\Routing\Controller;
 
 class PostsController extends Controller {
@@ -23,6 +25,22 @@ class PostsController extends Controller {
     public function __construct( PostRepositoryInterface $postRepository )
     {
         $this->postRepository = $postRepository;
+    }
+
+    /**
+     * Display a paginated list of the ask posts.
+     *
+     * @return mixed
+     */
+    public function ask()
+    {
+        // Fetch the newest posts records form the database.
+        //
+        $posts = $this->postRepository->getPaginatedAskWithUserAndComments();
+
+        // Show the page.
+        //
+        return routeView()->withPosts( $posts );
     }
 
     /**
@@ -48,7 +66,13 @@ class PostsController extends Controller {
      */
     public function create()
     {
+        // Create a new post instance.
         //
+        $post = $this->postRepository->createNewInstance();
+
+        // Show the page.
+        //
+        return routeView()->withPost( $post );
     }
 
     /**
@@ -60,7 +84,23 @@ class PostsController extends Controller {
     {
         // Fetch the newest posts records form the database.
         //
-        $posts = $this->postRepository->getNewestWithComments();
+        $posts = $this->postRepository->getPaginatedNewestWithUserAndComments();
+
+        // Show the page.
+        //
+        return routeView()->withPosts( $posts );
+    }
+
+    /**
+     * Display a paginated list of the newest posts.
+     *
+     * @return mixed
+     */
+    public function show_off()
+    {
+        // Fetch the newest posts records form the database.
+        //
+        $posts = $this->postRepository->getPaginatedShowOffWithUserAndComments();
 
         // Show the page.
         //
@@ -136,6 +176,30 @@ class PostsController extends Controller {
     public function update( $id , EditPostFormRequest $request )
     {
         //
+    }
+
+    /**
+     * Cast a vote towards a given post.
+     *
+     * @param int             $id
+     * @param VoteFormRequest $request
+     * @param VoteRepositoryInterface $voteRepository
+     *
+     * @return string
+     */
+    public function vote( $id , VoteFormRequest $request , VoteRepositoryInterface $voteRepository )
+    {
+        // Fetch the post record by the database.
+        //
+        $post = $this->postRepository->findById( $id );
+
+        // Appply the vote to the post.
+        //
+        $voteRepository->applyVoteToRecord( $post );
+
+        // Return json response.
+        //
+        return ['success' => 'Your vote has been casted.'];
     }
 
     /**

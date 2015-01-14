@@ -45,6 +45,22 @@ class CommentsController extends Controller {
     }
 
     /**
+     * Display a paginated list of the newest comments.
+     *
+     * @return mixed
+     */
+    public function newest()
+    {
+        // Fetch the newest comments records form the database.
+        //
+        $comments = $this->commentRepository->getPaginatedNewestWithReplies();
+
+        // Show the page.
+        //
+        return routeView()->withComments( $comments );
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param CommentFormRequest $request
@@ -75,7 +91,13 @@ class CommentsController extends Controller {
      */
     public function show( $id )
     {
+        // Fetch the comment record from the database.
         //
+        $comment = $this->commentRepository->findByIdWithReplies( $id );
+
+        // Show the page.
+        //
+        return routeView()->withComment( $comment );
     }
 
     /**
@@ -113,5 +135,4 @@ class CommentsController extends Controller {
     {
         //
     }
-
 }

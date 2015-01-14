@@ -1,6 +1,7 @@
 <?php namespace App\Comments;
 
 use App\Core\BasePresenter;
+use Illuminate\Support\Str;
 
 class CommentPresenter extends BasePresenter {
 
@@ -17,11 +18,25 @@ class CommentPresenter extends BasePresenter {
     /**
      * Return the comment made.
      *
+     * @param  bool $raw Return the raw response.
      * @return string
      */
-    public function getComment()
+    public function getComment( $raw = false )
     {
-        return $this->getWrappedObject()->comment;
+        // Obtain the comment from the record.
+        //
+        $comment = $this->getWrappedObject()->comment;
+
+        // If $raw = true we will return the raw comment.
+        //
+        // Otherwise we will return it in a manner to where each new line
+        // will become a <br>. We will also prevent the <br> from being
+        // stripped out.
+        //
+        // This is what you would edit should you want additional tags such
+        // as links to be shown.
+        //
+        return strip_tags( nl2br( $comment ), '<br>' );
     }
 
     /**
@@ -45,12 +60,87 @@ class CommentPresenter extends BasePresenter {
     }
 
     /**
+     * Return the id of the comment.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->getWrappedObject()->id;
+    }
+
+    /**
      * Return the link to the show comment page.
      *
      * @return string
      */
-    public function getShowLink()
+    public function getLinkToComment()
     {
         return route('comments.show', $this->getWrappedObject()->id);
+    }
+
+    /**
+     * Return the link to the parent item. Given that a comments may or may not have
+     * a parent comment we will simply link pack to the post if not parent comment
+     * is set.
+     *
+     * @return string
+     */
+    public function getLinkToParent()
+    {
+        // Check if there is no parent comment id set.
+        //
+        if( is_null( $this->getWrappedObject()->parent_id ) )
+        {
+            // Show the link to the post.
+            //
+            return route('posts.show', $this->getWrappedObject()->post_id);
+        }
+
+        // Show the link to the parent comment.
+        //
+        return route('comments.show', $this->getWrappedObject()->parent_id);
+    }
+
+
+    /**
+     * Return the parent id of the comment.
+     *
+     * @return int|null
+     */
+    public function getParentId()
+    {
+        return $this->getWrappedObject()->parent_id;
+    }
+
+    /**
+     * Return the post id of the comment.
+     *
+     * @return int
+     */
+    public function getPostId()
+    {
+        return $this->getWrappedObject()->post_id;
+    }
+
+    /**
+     * Convert the comment to a format that is title friendly in terms of it's length. This
+     * will be helpful for SEO purposes.
+     *
+     * @return mixed
+     */
+    public function getTitleFriendlyComment()
+    {
+        return Str::limit( $this->getComment(true), 45 );
+    }
+
+    /**
+     * Return the number of votes.
+     *
+     * @return int
+     */
+    public function getVoteCount()
+    {
+        return $this->getWrappedObject()->votes;
     }
 } 

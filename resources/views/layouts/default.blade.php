@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- This will allow you to set a page title through the view file. All whitespace will be trimmed. --}}
-    <title><?php $__env->startSection('pageTitle'); ?>Hacker News Clone<?php echo trim($__env->yieldSection()); ?></title>
+    <title><?php $__env->startSection('pageTitle'); ?>{{ $site_name }}<?php echo trim($__env->yieldSection()); ?></title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -38,5 +38,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+{{-- Embed Javascript in the footer of the page. --}}
+@yield('footer_embedded_js')
+
 </body>
 </html>

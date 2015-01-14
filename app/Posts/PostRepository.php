@@ -1,6 +1,7 @@
 <?php namespace App\Posts;
 
 use App\Core\RepositoryTrait;
+use DB;
 
 class PostRepository implements PostRepositoryInterface {
 
@@ -24,13 +25,13 @@ class PostRepository implements PostRepositoryInterface {
     /**
      * Locate post record by it's ID number.
      *
-     * @param int $id
+     * @param $id
      *
-     * @return
+     * @return mixed
      */
     public function findById( $id )
     {
-        return $this->getModel()->findByIdWith( $id, ['user'] );
+        return $this->findByIdWith( $id, ['user'] );
     }
 
     /**
@@ -103,6 +104,32 @@ class PostRepository implements PostRepositoryInterface {
     }
 
     /**
+     * Fetch records that have been marked as "ask" and return them in paginated form. Related user and comments
+     * will be in the results as well.
+     *
+     * @param int   $per_page The number of record to show on each page.
+     * @param array $columns  The columns that we want returned.
+     *
+     * @return mixed
+     */
+    public function getPaginatedAskWithUserAndComments( $per_page = 15, $columns = [ '*' ])
+    {
+        return $this->getMOdel()->with(['comments', 'user'])->ask()->paginate( $per_page, $columns );
+    }
+
+    /**
+     * Fetch the newest record and return them in paginated form
+     * @param int   $per_page
+     * @param array $columns
+     *
+     * @return mixed
+     */
+    public function getPaignatedNewestWithComments( $per_page = 15, $columns = [ '*' ] )
+    {
+        return $this->getModel()->latest()->paginate( $per_page, $columns);
+    }
+
+    /**
      * Fetch all records and return them in paginated form. We will include all eager loaded data as needed.
      *
      * @param array $with     Related data that we want eager-loaded.
@@ -113,20 +140,49 @@ class PostRepository implements PostRepositoryInterface {
      */
     public function getPaginatedWith( $with = [ ] , $per_page = 15 , $columns = [ '*' ] )
     {
-        return $this->model->with( $with )->paginate( $per_page , $columns );
+        return $this->getModel()->with( $with )->paginate( $per_page , $columns );
     }
 
     /**
-     * Fetch all records and return them in paginated form. Related comments will be in the results as well.
+     * Fetch all records and return them in paginated form. We will include all eager loaded data as needed as
+     * well as apply the ranking algorithm.
+     *
+     * @param array $with     Related data that we want eager-loaded.
+     * @param int   $per_page The number of record to show on each page.
+     * @param array $columns  The columns that we want returned.
+     *
+     * @return Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedRankWith( $with = [ ] , $per_page = 15 , $columns = [ '*' ] )
+    {
+        return $this->getModel()->with( $with )->ranked()->paginate( $per_page , $columns );
+    }
+
+    /**
+     * Fetch the newest records and return them in paginated form. Related user and comments will be in the results as well.
      *
      * @param int   $per_page The number of record to show on each page.
      * @param array $columns  The columns that we want returned.
      *
      * @return Illuminate\Pagination\LengthAwarePaginator
      */
-    public function getPaginatedWithComments( $per_page = 15 , $columns = [ '*' ] )
+    public function getPaginatedNewestWithUserAndComments( $per_page = 15 , $columns = [ '*' ] )
     {
-        return $this->getPaginatedWith( [ 'comments' ] , $per_page , $columns );
+        return $this->getModel()->with( [ 'comments', 'user' ]  )->latest()->paginate( $per_page , $columns );
+    }
+
+    /**
+     * Fetch records that have been marked as show and return them in paginated form. Related user and comments
+     * will be in the results as well.
+     *
+     * @param int   $per_page The number of record to show on each page.
+     * @param array $columns  The columns that we want returned.
+     *
+     * @return mixed
+     */
+    public function getPaginatedShowOffWithUserAndComments( $per_page = 15, $columns = [ '*' ])
+    {
+        return $this->getModel()->with(['comments', 'user'])->ranked()->show()->paginate( $per_page, $columns );
     }
 
     /**
@@ -139,6 +195,6 @@ class PostRepository implements PostRepositoryInterface {
      */
     public function getPaginatedWithUserAndComments( $per_page = 15 , $columns = [ '*' ] )
     {
-        return $this->getPaginatedWith( [ 'comments' , 'user' ] , $per_page , $columns );
+        return $this->getPaginatedRankWith(['comments', 'user'], $per_page, $columns);
     }
 } 

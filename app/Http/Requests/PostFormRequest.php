@@ -1,6 +1,7 @@
 <?php namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
+use Auth;
 
 class PostFormRequest extends Request {
 
@@ -11,8 +12,20 @@ class PostFormRequest extends Request {
 	 */
 	public function authorize()
 	{
-		return false;
+		return Auth::check();
 	}
+
+    /**
+     * Set custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'text.required_if' => 'The :attribute field is required when :other is blank.'
+        ];
+    }
 
 	/**
 	 * Get the validation rules that apply to the request.
@@ -22,7 +35,9 @@ class PostFormRequest extends Request {
 	public function rules()
 	{
 		return [
-			//
+            'text'  => 'required_if:url,',
+            'title' => 'required',
+            'url'   => 'url'
 		];
 	}
 

@@ -3,6 +3,8 @@
 use App\Core\PresentableSoftDeleteModel;
 use App\Posts\Post;
 use App\Users\User;
+use App\Votes\Vote;
+use DB;
 
 class Comment extends PresentableSoftDeleteModel {
 
@@ -31,6 +33,19 @@ class Comment extends PresentableSoftDeleteModel {
     }
 
     /**
+     * Query scope that will order results by ranking.
+     *
+     * @param $query
+     */
+    public function scopeRanked( $query )
+    {
+        return $query->select([
+            '*',
+            DB::raw('(POWER(comments.votes - 1, .8) / POWER(TIMESTAMPDIFF(HOUR, NOW(), comments.created_at) + 2, 1.8)) * comments.penalties as computed_rank')
+        ])->orderBy('computed_rank', 'DESC');
+    }
+
+    /**
      * Return the post that the comment was made towards.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -38,6 +53,16 @@ class Comment extends PresentableSoftDeleteModel {
     public function post()
     {
         return $this->belongsTo( Post::class );
+    }
+
+    /**
+     * Fetch all votes for the comment.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function votes()
+    {
+        return $this->morphMany( Vote::class, 'voteable');
     }
 
     /**

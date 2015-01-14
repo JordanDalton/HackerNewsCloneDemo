@@ -2,6 +2,10 @@
 
 use App\Comments\Comment;
 use App\Comments\CommentObserver;
+use App\Posts\Post;
+use App\Posts\PostObserver;
+use App\Votes\Vote;
+use App\Votes\VoteObserver;
 use Illuminate\Support\ServiceProvider;
 
 class ObserverServiceProvider extends ServiceProvider {
@@ -14,6 +18,8 @@ class ObserverServiceProvider extends ServiceProvider {
 	public function boot()
 	{
         Comment::observe( new CommentObserver );
+        Post::observe( new PostObserver );
+        Vote::observe( new VoteObserver );
 	}
 
 	/**

@@ -11,40 +11,10 @@
 |
 */
 
-// Comments Resource
+// Admin Namespace Routing Group
 //
-Route::resource('comments', 'Comments\CommentsController');
+Route::group(['namespace' => 'Admin', 'prefix' => 'Admin'], function(){
 
-// Posts Namespace Routing Group
-//
-Route::group(['namespace' => 'Posts'], function()
-{
-    Route::get('/', [
-        'as'    => 'posts.index',
-        'uses'  => 'PostsController@index'
-    ]);
-
-    Route::get('{id}', [
-        'as'    => 'posts.show',
-        'uses'  => 'PostsController@show'
-    ])->where('id', '\d+');
-
-    Route::get('submit', [
-        'as'    => 'posts.create',
-        'uses'  => 'PostsController@create'
-    ]);
-});
-
-// User Namespace Routing Group
-//
-Route::group(['namespace' => 'Users', 'prefix' => 'users'], function()
-{
-    // The user profile page.
-    //
-    Route::get('{username}', [
-        'as'    => 'users.show',
-        'uses'  => 'UsersController@show'
-    ]);
 });
 
 // Auth Namespace Routing Group
@@ -76,6 +46,76 @@ Route::group(['namespace' => 'Auth'], function()
     ]);
 });
 
+// Posts Namespace Routing Group
+//
+Route::group(['namespace' => 'Posts'], function()
+{
+    Route::get('/', [
+        'as'    => 'posts.index',
+        'uses'  => 'PostsController@index'
+    ]);
+
+    Route::get('{id}', [
+        'as'    => 'posts.show',
+        'uses'  => 'PostsController@show'
+    ])->where('id', '\d+');
+
+    Route::get('ask', [
+        'as'     => 'posts.ask',
+        'uses'  => 'PostsController@ask'
+    ]);
+
+    Route::get('newest', [
+        'as'     => 'posts.newest',
+        'uses'  => 'PostsController@newest'
+    ]);
+
+    Route::get('show', [
+       'as'     => 'posts.show_off',
+        'uses'  => 'PostsController@show_off'
+    ]);
+
+    Route::get('submit', [
+        'as'    => 'posts.create',
+        'uses'  => 'PostsController@create'
+    ]);
+
+    Route::post('submit', [
+        'as'    => 'posts.create',
+        'uses'  => 'PostsController@store'
+    ]);
+
+    Route::post('{id}/vote', [
+        'as'    => 'posts.vote',
+        'uses'  => 'PostsController@vote'
+    ]);
+});
+
+// Comments Resource
+//
+Route::resource('comments', 'Comments\CommentsController');
+
+// Comments Namespace Routing Group
+//
+Route::group(['namespace' => 'Comments'], function()
+{
+    Route::get('newcomments', [
+        'as'    => 'comments.newest',
+        'uses'  => 'CommentsController@newest'
+    ]);
+});
+
+// User Namespace Routing Group
+//
+Route::group(['namespace' => 'Users', 'prefix' => 'users'], function()
+{
+    // The user profile page.
+    //
+    Route::get('{username}', [
+        'as'    => 'users.show',
+        'uses'  => 'UsersController@show'
+    ]);
+});
 
 /*
 Route::get('/', 'WelcomeController@index');

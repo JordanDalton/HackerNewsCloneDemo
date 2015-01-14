@@ -4,7 +4,7 @@
     <div class="row">
         <!-- .col-lg-12 -->
         <div class="col-lg-12">
-            <small>&copy; {{ date('Y') }} Hacker News Clone</small>
+            <small>&copy; {{ date('Y') }} {{ $site_name }}</small>
         </div>
         <!-- /.col-lg-12 -->
     </div>

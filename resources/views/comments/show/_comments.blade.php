@@ -3,7 +3,7 @@
         <?php $marginLeft = ! is_null($comment->parent_id) ? 20 : 0;?>
         <?php $marginLeft = isSet($isChild) ? $marginLeft + 20 : 0;?>
         <?php $marginLeft = isSet($currentMarginLeft) ? $marginLeft + $currentMarginLeft : $marginLeft;?>
-        <div class="well well-sm comment-block {{ $comment->user_id == $post->user_id ? 'comment-by-poster' : '' }}" style="margin-left:{{ $marginLeft }}px">
+        <div class="well well-sm comment-block" style="margin-left:{{ $marginLeft }}px">
             <div>
                 <p>
                     <a class="underlined" href="{{ $comment->user->getProfileLink() }}">

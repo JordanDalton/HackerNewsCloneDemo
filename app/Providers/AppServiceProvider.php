@@ -51,6 +51,11 @@ class AppServiceProvider extends ServiceProvider {
             'App\Users\UserRepositoryInterface',
             'App\Users\UserRepository'
         );
+
+        $this->app->bind(
+            'App\Votes\VoteRepositoryInterface',
+            'App\Votes\VoteRepository'
+        );
 	}
 
 }
