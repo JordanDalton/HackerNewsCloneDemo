@@ -6,6 +6,7 @@ use App\Http\Requests\PostFormRequest;
 use App\Http\Requests\VoteFormRequest;
 use App\Posts\PostRepositoryInterface;
 use App\Votes\VoteRepositoryInterface;
+use Auth;
 use Illuminate\Routing\Controller;
 
 class PostsController extends Controller {
@@ -144,7 +145,7 @@ class PostsController extends Controller {
 
         // Show the page.
         //
-        return routeView()->withPost( $post );
+        return routeView()->withPost( $post )->withUserAlreadyVoted( $post->votedByLoggedInUser() );
     }
 
     /**
@@ -193,9 +194,13 @@ class PostsController extends Controller {
         //
         $post = $this->postRepository->findById( $id );
 
-        // Appply the vote to the post.
+        // Check if the user has already voted for this post.
         //
-        $voteRepository->applyVoteToRecord( $post );
+        $userAlreadyVoted = $voteRepository->checkIfUserAlreadyVotedForRecord( Auth::user(), $post );
+
+        // Apply the vote to the post only if the user hasn't already voted.
+        //
+        if( ! $userAlreadyVoted ) $voteRepository->applyVoteToRecord( $post );
 
         // Return json response.
         //

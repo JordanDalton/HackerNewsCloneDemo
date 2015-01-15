@@ -16,3 +16,8 @@
 </div>
 <!-- /.container -->
 @stop
+
+{{-- Embed javascript into the footer --}}
+@section('footer_embedded_js')
+    @include('comments._vote_embedded_js')
+@stop

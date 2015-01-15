@@ -22,16 +22,34 @@ class PostObserver {
         //
         if( $this->titleBeginsWithShowTitlePrefix( $post->title ))
         {
+            // Mark the record as a show post.
+            //
             $post->show = 1;
+
+            // Strip the show title prefix from the submitted title.
+            //
+            $post->title = str_replace($this->getShowTitlePrefix(), '', $post->title);
         }
 
         // If no url is submitted and the title does not being with the show_title_prefix (See config/settings.php)
-        // then we will adjust the title to represent a question.
+        // then we will mark the record as a question.
         //
         if( ! $post->url && ! $this->titleBeginsWithShowTitlePrefix( $post->title ))
         {
-            $post->title = 'Ask HNC: ' . $post->title;
+            // Mark the record as a ask (question) post.
+            //
+            $post->ask = 1;
         }
+    }
+
+    /**
+     * Obtain the show title prefix value from config/settings.php.
+     *
+     * @return string
+     */
+    private function getShowTitlePrefix()
+    {
+        return Config::get('settings.show_title_prefix');
     }
 
     /**
@@ -43,6 +61,6 @@ class PostObserver {
      */
     public function titleBeginsWithShowTitlePrefix( $title )
     {
-        return Str::startsWith( $title, Config::get('show_title_prefix'));
+        return Str::startsWith( $title, $this->getShowTitlePrefix());
     }
 } 

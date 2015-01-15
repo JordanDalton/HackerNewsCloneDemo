@@ -114,7 +114,7 @@ class PostRepository implements PostRepositoryInterface {
      */
     public function getPaginatedAskWithUserAndComments( $per_page = 15, $columns = [ '*' ])
     {
-        return $this->getMOdel()->with(['comments', 'user'])->ask()->paginate( $per_page, $columns );
+        return $this->getModel()->with(['comments', 'user'])->ask()->paginate( $per_page, $columns );
     }
 
     /**

@@ -11,15 +11,22 @@
         <div class="col-lg-12">
             <div>
                 <p>
-                    <a id="vote_up_comment_{{ $comment->getId() }}" class="btn btn-xs btn-default" href="#">
-                        <i class="fa fa-arrow-up"></i>
-                    </a>
+                    @if( $comment->votedByLoggedInUser())
+                        <a class="btn btn-xs btn-success" href="#">
+                            Voted
+                        </a>
+                    @else
+                        <a id="vote_up_comment_{{ $comment->getId() }}" class="btn btn-xs btn-info" href="#" data-target-url="{{ $comment->getVoteUrl() }}">
+                            <i class="fa fa-arrow-up"></i>
+                        </a>
+                    @endif
+
                     {{ $comment->getVoteCount() }} points by
                     <a class="underlined" href="{{ $comment->user->getProfileLink() }}">
                         {{ $comment->user->getUsername() }}
                     </a>
                     {{ $comment->user->getDurationSinceCreated() }}
-                    | <a class="underlined" href="{{ $comment->getId() }}">Link</a>
+                    | <a class="underlined" href="{{ $comment->getLinkToComment() }}">Link</a>
                     | <a class="underlined" href="{{ $comment->getLinkToParent() }}">Parent</a>
                     | on: <a class="underlined" href="{{ $comment->post->getLinkToPost() }}">{{ $comment->post->getTitle() }}</a></p>
                 <p class="lead">
@@ -34,3 +41,8 @@
     </div>
     <!-- /.row -->
 @endforeach
+
+{{-- Embed javascript into the footer --}}
+@section('footer_embedded_js')
+    @include('comments._vote_embedded_js')
+@stop

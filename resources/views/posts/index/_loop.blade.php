@@ -3,9 +3,16 @@
         <div class="media">
             <div class="media-body">
                 <h4 class="media-heading">
-                    <a id="vote_up_post_{{ $post->getId() }}" class="btn btn-xs btn-default" href="#" data-target-url="{{ $post->getVoteUrl() }}">
-                        <i class="fa fa-arrow-up"></i>
-                    </a>
+                    @if( $post->votedByLoggedInUser())
+                        <a class="btn btn-xs btn-success" href="#">
+                            Voted
+                        </a>
+                    @else
+                        <a id="vote_up_post_{{ $post->getId() }}" class="btn btn-xs btn-info" href="#" data-target-url="{{ $post->getVoteUrl() }}">
+                            <i class="fa fa-arrow-up"></i>
+                        </a>
+                    @endif
+
                     <a href="{{ $post->getPostUrl() }}">
                         {{ $post->getTitle() }}
                     </a>
@@ -17,7 +24,7 @@
                 </h4>
                 <div>
                     <small>
-                        {{ $post->getVoteCount() }} points by <a class="underlined" href="{{ $post->getLinkToPostersProfile() }}">{{ $post->user->getUsername() }}</a> {{ $post->getDurationSinceCreated() }} | <a class="underlined" href="{{ $post->getLinkToPost() }}">{{ $post->getCommentsCountOrDiscuss() }}</a>
+                        {{ $post->getVoteCount() }} points by <a class="underlined" href="{{ $post->user->getProfileLink() }}">{{ $post->user->getUsername() }}</a> {{ $post->getDurationSinceCreated() }} | <a class="underlined" href="{{ $post->getLinkToPost() }}">{{ $post->showCommentsCountOrDiscuss() }}</a>
                     </small>
                 </div>
             </div>
@@ -26,28 +33,7 @@
 </div>
 <hr/>
 
+{{-- Embed javascript into the footer --}}
 @section('footer_embedded_js')
-    <script type="text/javascript">
-        $('a[id^="vote_up_post_"]').on('click', function(event)
-        {
-            event.preventDefault();
-
-            // The url where the request will be sent.
-            //
-            var target_url = $(this).data('target-url');
-
-            $.ajax({
-                'type' : 'POST',
-                'url'  : target_url,
-                'data' : {
-                    'now'   : $.now(),
-                    '_token': '{{ csrf_token() }}'
-                }
-            }).done(function(response){
-                console.log(response);
-            });
-
-            console.log('i was clicked');
-        });
-    </script>
+    @include('posts._vote_embedded_js')
 @stop

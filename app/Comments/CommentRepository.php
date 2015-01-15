@@ -24,6 +24,18 @@ class CommentRepository implements CommentRepositoryInterface {
     }
 
     /**
+     * Locate comment record by it's ID number.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function findById( $id )
+    {
+        return $this->findByIdWith( $id );
+    }
+
+    /**
      * Fetch comment record by it's ID number and include related data as needed.
      *
      * @param int   $id

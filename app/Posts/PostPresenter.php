@@ -17,33 +17,6 @@ class PostPresenter extends BasePresenter {
     }
 
     /**
-     * Return the number of comments made towards the post.
-     *
-     * @return integer
-     */
-    public function getCommentsCount()
-    {
-        return $this->getWrappedObject()->comments->count();
-    }
-
-    /**
-     * If there are more than 1 comment made we will return the
-     * number of comments. Otherwise return the word 'discuss.'
-     *
-     * @return int|string
-     */
-    public function getCommentsCountOrDiscuss()
-    {
-        return Lang::choice(
-            '{0} discuss|[1,1] :count comment|[2,Inf] :count comments',
-            $this->getCommentsCount(),
-            [
-                'count' => $this->getCommentsCount()
-            ]
-        );
-    }
-
-    /**
      * Get the difference in a human readable format for the duration since the post was created.
      *
      * @return string
@@ -71,16 +44,6 @@ class PostPresenter extends BasePresenter {
     public function getLinkToPost()
     {
         return route('posts.show', $this->getWrappedObject()->id);
-    }
-
-    /**
-     * Return the link to the profile of the poster.
-     *
-     * @return string
-     */
-    public function getLinkToPostersProfile()
-    {
-        return route('users.show', $this->getWrappedObject()->user->getUsername());
     }
 
     /**
@@ -227,5 +190,20 @@ class PostPresenter extends BasePresenter {
     public function isQuestion()
     {
         return $this->getWrappedObject()->ask;
+    }
+
+    /**
+     * If there are more than 1 comment made we will return the
+     * number of comments. Otherwise return the word 'discuss.'
+     *
+     * @return int|string
+     */
+    public function showCommentsCountOrDiscuss()
+    {
+        // Obtain the comment count.
+        //
+        $count = $this->getWrappedObject()->comments->count();
+
+        return Lang::choice('{0} discuss|[1,1] :count comment|[2,Inf] :count comments', $count, [ 'count' => $count ]);
     }
 } 

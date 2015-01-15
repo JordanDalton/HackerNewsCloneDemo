@@ -1,6 +1,7 @@
 <?php namespace App\Votes;
 
 use App\Core\RepositoryTrait;
+use App\Users\User;
 
 class VoteRepository implements VoteRepositoryInterface {
 
@@ -31,5 +32,18 @@ class VoteRepository implements VoteRepositoryInterface {
     public function applyVoteToRecord( $record )
     {
         return $record->votes()->save( $this->createNewInstance() );
+    }
+
+    /**
+     * Check if the user has already voted for the record.
+     *
+     * @param User  $user
+     * @param mixed $record
+     *
+     * @return int
+     */
+    public function checkIfUserAlreadyVotedForRecord( User $user, $record )
+    {
+        return $record->votes()->whereUserId( $user->id )->count();
     }
 }

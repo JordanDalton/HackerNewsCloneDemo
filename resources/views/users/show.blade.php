@@ -1,5 +1,10 @@
 @extends($layout)
 
+{{-- Set the title of the page. --}}
+@section('pageTitle')
+    {{ $user->getUsername() }} | @parent
+@stop
+
 @section('content')
 <!-- .container -->
 <div class="container">

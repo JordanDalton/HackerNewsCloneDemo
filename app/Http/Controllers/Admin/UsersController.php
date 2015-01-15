@@ -1,13 +1,15 @@
-<?php namespace App\Http\Controllers\Users;
+<?php namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests;
+use App\Http\Controllers\Controller;
 use App\Users\UserRepositoryInterface;
-use Illuminate\Routing\Controller;
 
 class UsersController extends Controller {
 
     /**
-     * @var \App\Users\UserRepositoryInterface
+     * The user repository implementation.
+     *
+     * @var \UserRepositoryInterface
      */
     private $userRepository;
 
@@ -19,15 +21,6 @@ class UsersController extends Controller {
     public function __construct( UserRepositoryInterface $userRepository )
     {
         $this->userRepository = $userRepository;
-
-        // Require the user to be logged with the show method being the only exception
-        //
-        $this->middleware(
-            'auth' , [
-            'except' => [
-                'show' ,
-            ]
-        ] );
     }
 
     /**
@@ -37,7 +30,13 @@ class UsersController extends Controller {
      */
     public function index()
     {
+        // Fetch a paginated listing of all users in the system.
         //
+        $users = $this->userRepository->getPaginatedResourceListing();
+
+        // Show the page.
+        //
+        return routeView()->withUsers( $users );
     }
 
     /**
@@ -69,13 +68,7 @@ class UsersController extends Controller {
      */
     public function show( $id )
     {
-        // Fetch the user record from the database.
         //
-        $user = $this->userRepository->findByUsername( $id );
-
-        // Show the page.
-        //
-        return routeView()->withUser( $user );
     }
 
     /**
@@ -87,13 +80,13 @@ class UsersController extends Controller {
      */
     public function edit( $id )
     {
-        // Fetch the user record from the database.
+        // Fetch the user account from the database.
         //
-        $user = $this->userRepository->findByUsername( $id );
+        $user = $this->userRepository->findById( $id );
 
         // Show the page.
         //
-        return routeView()->withUser($user);
+        return routeView()->withUser( $user );
     }
 
     /**

@@ -143,4 +143,14 @@ class CommentPresenter extends BasePresenter {
     {
         return $this->getWrappedObject()->votes;
     }
+
+    /**
+     * Return the url where the votes will be casted.
+     *
+     * @return string
+     */
+    public function getVoteUrl()
+    {
+        return route('comments.vote', $this->getWrappedObject()->id);
+    }
 } 

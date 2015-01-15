@@ -35,6 +35,26 @@ class UserPresenter extends BasePresenter {
     }
 
     /**
+     * Return the email address.
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->getWrappedObject()->email;
+    }
+
+    /**
+     * Return the ID number of the user.
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->getWrappedObject()->id;
+    }
+
+    /**
      * Get the users computed karma score.
      *
      * @return int
@@ -51,7 +71,7 @@ class UserPresenter extends BasePresenter {
      */
     public function getProfileLink()
     {
-        return route('users.show', $this->getWrappedObject()->id);
+        return route('users.show', $this->getWrappedObject()->username);
     }
 
     /**

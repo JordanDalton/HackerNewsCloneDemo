@@ -4,6 +4,7 @@ use App\Core\PresentableSoftDeleteModel;
 use App\Posts\Post;
 use App\Users\User;
 use App\Votes\Vote;
+use Auth;
 use DB;
 
 class Comment extends PresentableSoftDeleteModel {
@@ -41,7 +42,7 @@ class Comment extends PresentableSoftDeleteModel {
     {
         return $query->select([
             '*',
-            DB::raw('(POWER(comments.votes - 1, .8) / POWER(TIMESTAMPDIFF(HOUR, NOW(), comments.created_at) + 2, 1.8)) * comments.penalties as computed_rank')
+            DB::raw('(POWER(comments.votes - 1, .8) / POWER(CAST((TIMESTAMPDIFF(HOUR, NOW(), comments.created_at) + 2) AS unsigned), 1.8)) * comments.penalties AS computed_rank')
         ])->orderBy('computed_rank', 'DESC');
     }
 
@@ -56,16 +57,6 @@ class Comment extends PresentableSoftDeleteModel {
     }
 
     /**
-     * Fetch all votes for the comment.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function votes()
-    {
-        return $this->morphMany( Vote::class, 'voteable');
-    }
-
-    /**
      * Return the record of the user that made the comment.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -73,5 +64,25 @@ class Comment extends PresentableSoftDeleteModel {
     public function user()
     {
         return $this->belongsTo( User::class );
+    }
+
+    /**
+     * Fetch all the votes by the logged in user.
+     *
+     * @return mixed
+     */
+    public function votedByLoggedInUser()
+    {
+        return (boolean) $this->votes()->whereUserId( Auth::check() ? Auth::id() : 0 )->count();
+    }
+
+    /**
+     * Fetch all votes for the comment.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function votes()
+    {
+        return $this->morphMany( Vote::class, 'voteable');
     }
 } 

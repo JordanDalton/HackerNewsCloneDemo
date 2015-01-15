@@ -13,8 +13,30 @@
 
 // Admin Namespace Routing Group
 //
-Route::group(['namespace' => 'Admin', 'prefix' => 'Admin'], function(){
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function()
+{
+    // Dashboard
+    //
+    Route::get('/', [
+        'as'    => 'admin.dashboard',
+        'uses'  => 'DashboardController@index'
+    ]);
 
+    // Comments Controller
+    //
+    Route::resource('comments', 'CommentsController');
+
+    // Posts Resource
+    //
+    Route::resource('posts', 'PostsController');
+
+    // Users Resource
+    //
+    Route::resource('users', 'UsersController');
+
+    // Votes Resource
+    //
+    Route::resource('votes', 'VotesController');
 });
 
 // Auth Namespace Routing Group
@@ -76,13 +98,15 @@ Route::group(['namespace' => 'Posts'], function()
     ]);
 
     Route::get('submit', [
-        'as'    => 'posts.create',
-        'uses'  => 'PostsController@create'
+        'as'         => 'posts.create',
+        'middleware' => ['auth'],
+        'uses'       => 'PostsController@create'
     ]);
 
     Route::post('submit', [
-        'as'    => 'posts.create',
-        'uses'  => 'PostsController@store'
+        'as'         => 'posts.create',
+        'middleware' => ['auth'],
+        'uses'       => 'PostsController@store'
     ]);
 
     Route::post('{id}/vote', [
@@ -103,18 +127,20 @@ Route::group(['namespace' => 'Comments'], function()
         'as'    => 'comments.newest',
         'uses'  => 'CommentsController@newest'
     ]);
+
+    Route::post('comments/{id}/vote', [
+        'as'    => 'comments.vote',
+        'uses'  => 'CommentsController@vote'
+    ]);
 });
 
 // User Namespace Routing Group
 //
-Route::group(['namespace' => 'Users', 'prefix' => 'users'], function()
+Route::group(['namespace' => 'Users'], function()
 {
-    // The user profile page.
+    // The Users Resource
     //
-    Route::get('{username}', [
-        'as'    => 'users.show',
-        'uses'  => 'UsersController@show'
-    ]);
+    Route::resource('users', 'UsersController');
 });
 
 /*

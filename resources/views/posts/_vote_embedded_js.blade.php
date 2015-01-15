@@ -1,0 +1,1 @@
+@include('layouts.partials.vote', ['selector' => 'vote_up_post_'])

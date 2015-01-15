@@ -4,6 +4,9 @@ use App\Comments\CommentRepositoryInterface;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentFormRequest;
+use App\Http\Requests\VoteFormRequest;
+use App\Votes\VoteRepositoryInterface;
+use Auth;
 
 class CommentsController extends Controller {
 
@@ -97,7 +100,7 @@ class CommentsController extends Controller {
 
         // Show the page.
         //
-        return routeView()->withComment( $comment );
+        return routeView()->withComment( $comment )->withUserAlreadyVoted( $comment->votedByLoggedInUser() );
     }
 
     /**
@@ -134,5 +137,33 @@ class CommentsController extends Controller {
     public function destroy( $id )
     {
         //
+    }
+
+    /**
+     * Cast a vote towards a given comment.
+     *
+     * @param int             $id
+     * @param VoteFormRequest $request
+     * @param VoteRepositoryInterface $voteRepository
+     *
+     * @return string
+     */
+    public function vote( $id , VoteFormRequest $request , VoteRepositoryInterface $voteRepository )
+    {
+        // Fetch the comment record by the database.
+        //
+        $comment = $this->commentRepository->findById( $id );
+
+        // Check if the user has already voted for this comment.
+        //
+        $userAlreadyVoted = $voteRepository->checkIfUserAlreadyVotedForRecord( Auth::user(), $comment );
+
+        // Apply the vote to the comment only if the user hasn't already voted.
+        //
+        if( ! $userAlreadyVoted ) $voteRepository->applyVoteToRecord( $comment );
+
+        // Return json response.
+        //
+        return ['success' => 'Your vote has been casted.'];
     }
 }

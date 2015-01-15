@@ -24,6 +24,18 @@ class UserRepository implements UserRepositoryInterface {
     }
 
     /**
+     * Find a specific user record by it's ID number.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function findById( $id )
+    {
+        return $this->getModel()->findOrFail( $id );
+    }
+
+    /**
      * Find a specific user record by it's username.
      *
      * @param mixed $username
@@ -41,5 +53,13 @@ class UserRepository implements UserRepositoryInterface {
     public function getIdList()
     {
         return $this->model->lists('id');
+    }
+
+    /**
+     * Fetch all users records from the database and return in a paginated collection.
+     */
+    public function getPaginatedResourceListing( $per_page = 15, $columns = [ '*' ])
+    {
+        return $this->getModel()->latest()->paginate( $per_page , $columns );
     }
 } 
