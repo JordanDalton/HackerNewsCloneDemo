@@ -7,11 +7,11 @@
 @section('content')
 <!-- .container -->
 <div class="container">
-
-    <div class="jumbotron">
-        <h1>Newest Comments</h1>
+    <!-- .page-header -->
+    <div class="page-header">
+        <h1>Latest Comments</h1>
     </div>
-
+    <!-- /.page-header -->
     @include(Route::currentRouteName().'._loop')
 </div>
 <!-- /.container -->

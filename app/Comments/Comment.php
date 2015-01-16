@@ -30,7 +30,7 @@ class Comment extends PresentableSoftDeleteModel {
      */
     public function replies()
     {
-        return $this->hasMany( static::class, 'parent_id')->with('replies');
+        return $this->hasMany( static::class, 'parent_id' )->with('replies');
     }
 
     /**
@@ -42,7 +42,7 @@ class Comment extends PresentableSoftDeleteModel {
     {
         return $query->select([
             '*',
-            DB::raw('(POWER(comments.votes - 1, .8) / POWER(CAST((TIMESTAMPDIFF(HOUR, NOW(), comments.created_at) + 2) AS unsigned), 1.8)) * comments.penalties AS computed_rank')
+            DB::raw('(POWER(comments.votes, .8) / POWER(CAST((TIMESTAMPDIFF(HOUR, NOW(), comments.created_at) + 2) AS unsigned), 1.8)) * comments.penalties AS computed_rank')
         ])->orderBy('computed_rank', 'DESC');
     }
 
@@ -54,6 +54,21 @@ class Comment extends PresentableSoftDeleteModel {
     public function post()
     {
         return $this->belongsTo( Post::class );
+    }
+
+    /**
+     * Query scope that will filter out records where the user is banned.
+     *
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeByUnbannedUser( $query )
+    {
+        return $query->whereHas( 'user' , function ( $query )
+        {
+            return $query->unbanned();
+        } );
     }
 
     /**

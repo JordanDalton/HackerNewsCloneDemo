@@ -1,18 +1,19 @@
 <div class="row">
     <div class="col-md-12">
         <div class="media">
+            <div class="media-left">
+                @if( $post->votedByLoggedInUser())
+                    <a class="btn btn-xs btn-success" href="#">
+                        Voted
+                    </a>
+                @else
+                    <a id="vote_up_post_{{ $post->getId() }}" class="btn btn-xs btn-info" href="#" data-target-url="{{ $post->getVoteUrl() }}">
+                        <i class="fa fa-arrow-up"></i>
+                    </a>
+                @endif
+            </div>
             <div class="media-body">
                 <h4 class="media-heading">
-                    @if( $post->votedByLoggedInUser())
-                        <a class="btn btn-xs btn-success" href="#">
-                            Voted
-                        </a>
-                    @else
-                        <a id="vote_up_post_{{ $post->getId() }}" class="btn btn-xs btn-info" href="#" data-target-url="{{ $post->getVoteUrl() }}">
-                            <i class="fa fa-arrow-up"></i>
-                        </a>
-                    @endif
-
                     <a href="{{ $post->getPostUrl() }}">
                         {{ $post->getTitle() }}
                     </a>

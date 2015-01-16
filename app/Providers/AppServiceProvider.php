@@ -48,6 +48,11 @@ class AppServiceProvider extends ServiceProvider {
         );
 
         $this->app->bind(
+            'App\Roles\RoleRepositoryInterface',
+            'App\Roles\RoleRepository'
+        );
+
+        $this->app->bind(
             'App\Users\UserRepositoryInterface',
             'App\Users\UserRepository'
         );

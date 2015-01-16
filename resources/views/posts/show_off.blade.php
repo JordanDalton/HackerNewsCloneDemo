@@ -6,10 +6,12 @@
 
 @section('content')
     <div class="container">
-
-        <div class="jumbotron">
-            <h1>Show {{ $site_name }}</h1>
+        <!-- .page-header -->
+        <div class="page-header">
+            <h1>Show Us Your Site!</h1>
+            <p>Getting opinions on your site. You never know, you may just be next Google!</p>
         </div>
+        <!-- /.page-header -->
 
         @foreach( $posts as $post )
             @include(Route::currentRouteName().'._loop')

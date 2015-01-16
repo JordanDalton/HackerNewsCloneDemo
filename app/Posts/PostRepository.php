@@ -53,7 +53,7 @@ class PostRepository implements PostRepositoryInterface {
      * the comments made towards the post, and the user information about the person who made
      * the comment.
      *
-     * @param       $id
+     * @param int $id
      *
      * @return mixed
      */
@@ -155,7 +155,7 @@ class PostRepository implements PostRepositoryInterface {
      */
     public function getPaginatedRankWith( $with = [ ] , $per_page = 15 , $columns = [ '*' ] )
     {
-        return $this->getModel()->with( $with )->ranked()->paginate( $per_page , $columns );
+        return $this->getModel()->with( $with )->ranked()->byUnbannedUser()->paginate( $per_page , $columns );
     }
 
     /**

@@ -102,7 +102,7 @@ class PostsTableSeeder extends Seeder {
 
             $this->posts[ ] = [
                 'ask'        => $ask,
-                'created_at' => $this->faker->dateTimeBetween($startDate = '-1 week', $endDate = 'now'),
+                'created_at' => $this->faker->dateTimeBetween($startDate = '-1 day', $endDate = 'now'),
                 'show'       => $ask ? false : $this->faker->boolean(),
                 'text'       => $this->faker->realText($maxNbChars = 200, $indexSize = 2) ,
                 'title'      => $this->faker->realText($maxNbChars = 25, $indexSize = 2) ,

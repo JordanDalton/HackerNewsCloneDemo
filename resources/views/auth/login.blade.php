@@ -1,12 +1,13 @@
-@extends('app')
+@extends($layout)
 
 @section('content')
-<div class="container-fluid">
+<div class="container">
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
+		<div class="col-md-8">
 			<div class="panel panel-default">
 				<div class="panel-heading">Login</div>
 				<div class="panel-body">
+
 					@if (count($errors) > 0)
 						<div class="alert alert-danger">
 							<strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -18,43 +19,39 @@
 						</div>
 					@endif
 
-					<form class="form-horizontal" role="form" method="POST" action="/auth/login">
-						<input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-						<div class="form-group">
-							<label class="col-md-4 control-label">E-Mail Address</label>
-							<div class="col-md-6">
-								<input type="email" class="form-control" name="email" value="{{ old('email') }}">
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label class="col-md-4 control-label">Password</label>
-							<div class="col-md-6">
-								<input type="password" class="form-control" name="password">
-							</div>
-						</div>
-
+                    {!! Form::open(['class' => 'form-horizontal', 'role' => 'form', 'route' => 'auth.login']) !!}
+                        <!-- Email Form Input -->
+                        <div class="form-group {{ hasError('email', $errors) }}">
+                            {!! Form::label('email', 'Email:', ['class' => 'col-md-4 control-label']) !!}
+                            <div class="col-md-6">
+                                {!! Form::text('email', Input::get('email', ''), ['class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                        <!-- Password Form Input -->
+                        <div class="form-group {{ hasError('password', $errors) }}">
+                            {!! Form::label('password', 'Password:', ['class' => 'col-md-4 control-label']) !!}
+                            <div class="col-md-6">
+                                {!! Form::password('password', ['class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                        <!-- Remember User Form Input -->
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
 								<div class="checkbox">
 									<label>
-										<input type="checkbox" name="remember"> Remember Me
+                                        {!! Form::checkbox('remember', 1, Input::get('remember', false)) !!} Remember Me
 									</label>
 								</div>
 							</div>
 						</div>
-
+                        <!-- Submit Form Button -->
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
-								<button type="submit" class="btn btn-primary" style="margin-right: 15px;">
-									Login
-								</button>
-
+                                {!! Form::button('Login', ['class' => 'btn btn-primary', 'style' => 'margin-right: 15px', 'type' => 'submit']) !!}
 								<a href="/password/email">Forgot Your Password?</a>
 							</div>
 						</div>
-					</form>
+					{!! Form::close() !!}
 				</div>
 			</div>
 		</div>

@@ -123,7 +123,7 @@ class CommentsTableSeeder extends Seeder {
         foreach ( range( 1 , 20 ) as $index )
         {
             $this->comments[ ] = [
-                'created_at' => $this->faker->dateTimeBetween($startDate = '-1 week', $endDate = 'now') ,
+                'created_at' => $this->faker->dateTimeBetween($startDate = '-1 day', $endDate = 'now') ,
                 'deleted_at' => null,
                 'comment'    => $this->faker->realText($maxNbChars = 200, $indexSize = 2),
                 'post_id'    => $this->faker->randomElement( $post_ids ) ,

@@ -62,4 +62,33 @@ class UserRepository implements UserRepositoryInterface {
     {
         return $this->getModel()->latest()->paginate( $per_page , $columns );
     }
+
+    /**
+     * Query the database to see if the supplied $email_authentication_code matches
+     * that of a user that has yet to be activated.
+     *
+     * @param string $email_authentication_code The email verification code that was emailed to the user.
+     *
+     * @return User|null
+     */
+    public function isValidEmailAuthenticationCode( $email_authentication_code )
+    {
+        return $this->getModel()->inactive()->whereEmailAuthenticationCode( $email_authentication_code )->first();
+    }
+
+    /**
+     * Mark a user account as email authenticated.
+     *
+     * @param User $account
+     *
+     * @return boolean
+     */
+    public function markAccountAsEmailAuthenticated( $account )
+    {
+        return $account->fill([
+            'activated_at' => new DateTime,
+            'active' => 1
+        ])->save();
+    }
+
 } 

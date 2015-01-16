@@ -11,7 +11,9 @@ class DatabaseSeeder extends Seeder {
      * @var array
      */
     protected $tables = [
+        'roles',
         'users',
+        'user_role',
         'posts',
         'comments',
     ];
@@ -22,7 +24,9 @@ class DatabaseSeeder extends Seeder {
      * @var array
      */
     protected $seeders = [
+        'RolesTableSeeder',
         'UsersTableSeeder',
+        'UserRoleTableSeeder',
         'PostsTableSeeder',
         'CommentsTableSeeder',
     ];

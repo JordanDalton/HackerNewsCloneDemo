@@ -2,6 +2,7 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminEditUserFormRequest;
 use App\Users\UserRepositoryInterface;
 
 class UsersController extends Controller {
@@ -46,7 +47,9 @@ class UsersController extends Controller {
      */
     public function create()
     {
+        // Show the page.
         //
+        return routeView();
     }
 
     /**
@@ -92,13 +95,25 @@ class UsersController extends Controller {
     /**
      * Update the specified resource in storage.
      *
-     * @param  int $id
+     * @param  int                     $id
+     * @param AdminEditUserFormRequest $request
      *
      * @return Response
      */
-    public function update( $id )
+    public function update( $id , AdminEditUserFormRequest $request )
     {
+        // Fetch the user account from the database.
         //
+        $user = $this->userRepository->findById( $id );
+
+        // Update the record.
+        //
+        $this->userRepository->updateRecord( $user, $request->except('_token') );
+
+        // Send the user back to the page and flash a message to them that
+        // states the user record was successfully updated.
+        //
+        return redirect()->back()->withUserUpdatedSuccessfully(true);
     }
 
     /**

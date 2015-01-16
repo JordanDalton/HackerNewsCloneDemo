@@ -22,8 +22,8 @@ class Post extends PresentableSoftDeleteModel {
      * @var array
      */
     protected $fillable = [
-        'text',
-        'title',
+        'text' ,
+        'title' ,
         'url'
     ];
 
@@ -34,7 +34,7 @@ class Post extends PresentableSoftDeleteModel {
      */
     public function comments()
     {
-        return $this->hasMany( Comment::class )->ranked();
+        return $this->hasMany( Comment::class )->ranked()->byUnbannedUser();
     }
 
     /**
@@ -45,7 +45,7 @@ class Post extends PresentableSoftDeleteModel {
      */
     public function parentComments()
     {
-        return $this->comments()->whereNull('parent_id');
+        return $this->comments()->whereNull( 'parent_id' );
     }
 
     /**
@@ -57,7 +57,7 @@ class Post extends PresentableSoftDeleteModel {
      */
     public function scopeAsk( $query )
     {
-        return $query->whereAsk(true);
+        return $query->whereAsk( true );
     }
 
     /**
@@ -67,10 +67,25 @@ class Post extends PresentableSoftDeleteModel {
      */
     public function scopeRanked( $query )
     {
-        return $query->select([
-            '*',
-            DB::raw('(POWER(posts.votes - 1, .8) / POWER(CAST((TIMESTAMPDIFF(HOUR, NOW(), posts.created_at) + 2) AS unsigned), 1.8)) * posts.penalties AS computed_rank')
-        ])->orderBy('computed_rank', 'DESC');
+        return $query->select( [
+            '*' ,
+            DB::raw( '(POWER(posts.votes, .8) / POWER(CAST((TIMESTAMPDIFF(HOUR, NOW(), posts.created_at) + 2) AS unsigned), 1.8)) * posts.penalties AS computed_rank' )
+        ] )->orderBy( 'computed_rank' , 'DESC' );
+    }
+
+    /**
+     * Query scope that will filter out records where the user is banned.
+     *
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeByUnbannedUser( $query )
+    {
+        return $query->whereHas( 'user' , function ( $query )
+        {
+            return $query->unbanned();
+        } );
     }
 
     /**
@@ -82,7 +97,7 @@ class Post extends PresentableSoftDeleteModel {
      */
     public function scopeShow( $query )
     {
-        return $query->whereShow(true);
+        return $query->whereShow( true );
     }
 
     /**
@@ -102,7 +117,7 @@ class Post extends PresentableSoftDeleteModel {
      */
     public function votes()
     {
-        return $this->morphMany( Vote::class, 'voteable');
+        return $this->morphMany( Vote::class , 'voteable' );
     }
 
     /**

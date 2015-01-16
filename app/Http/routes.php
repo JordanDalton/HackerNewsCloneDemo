@@ -30,6 +30,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function()
     //
     Route::resource('posts', 'PostsController');
 
+    // Roles Resource
+    //
+    Route::resource('roles', 'RolesController');
+
     // Users Resource
     //
     Route::resource('users', 'UsersController');
@@ -43,18 +47,24 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function()
 //
 Route::group(['namespace' => 'Auth'], function()
 {
+    Route::get('verify-email/{email_authentication_code}', [
+        'as'    => 'auth.email.verify',
+        'uses'  => 'AuthController@getEmailVerify'
+    ]);
+
     Route::get('login', [
         'as'    => 'auth.login',
-        function(){
-            Auth::attempt(['email' => 'administrator@example.com', 'password' => 'password']);
-            return route('posts.index');
-        }
-        //'uses'  => 'AuthController@getLogin',
+        'uses'  => 'AuthController@getLogin',
     ]);
 
     Route::post('login', [
         'as'    => 'auth.login',
         'uses'  => 'AuthController@postLogin',
+    ]);
+
+    Route::get('logout', [
+        'as'    => 'logout',
+        'uses'  => 'AuthController@getLogout'
     ]);
 
     Route::get('register', [

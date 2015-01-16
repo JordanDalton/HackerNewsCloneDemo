@@ -77,9 +77,10 @@ class UsersTableSeeder extends Seeder {
         // Create a standard administrator account.
         //
         $this->users[ ] = [
+            'active'                    => true,
             'created_at'                => new DateTime ,
             'email'                     => "administrator@example.com" ,
-            'email_authenticated'       => 1 ,
+            'email_authenticated'       => true ,
             'email_authenticated_at'    => new DateTime,
             'email_authentication_code' => $this->userRepository->getModel()->generateUniqueEmailAuthenticationCode() ,
             'password'                  => Hash::make( 'password' ) ,
@@ -98,11 +99,14 @@ class UsersTableSeeder extends Seeder {
         //
         foreach ( range( 1 , 20 ) as $index )
         {
+            $email_authenticated = $this->faker->boolean;
+
             $this->users[ ] = [
+                'active'                    => $email_authenticated ? true : false,
                 'created_at'                => new DateTime ,
                 'email'                     => "user{$index}@me.com" ,
-                'email_authenticated'       => $this->faker->boolean ,
-                'email_authenticated_at'    => null,
+                'email_authenticated'       => $email_authenticated ,
+                'email_authenticated_at'    => $email_authenticated ? new DateTime : null,
                 'email_authentication_code' => $this->userRepository->getModel()->generateUniqueEmailAuthenticationCode() ,
                 'password'                  => Hash::make( 'password' ) ,
                 'username'                  => "user{$index}" ,

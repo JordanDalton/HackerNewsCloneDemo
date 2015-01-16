@@ -4,6 +4,8 @@ use App\Comments\Comment;
 use App\Comments\CommentObserver;
 use App\Posts\Post;
 use App\Posts\PostObserver;
+use App\Users\User;
+use App\Users\UserObserver;
 use App\Votes\Vote;
 use App\Votes\VoteObserver;
 use Illuminate\Support\ServiceProvider;
@@ -19,6 +21,7 @@ class ObserverServiceProvider extends ServiceProvider {
 	{
         Comment::observe( new CommentObserver );
         Post::observe( new PostObserver );
+        User::observe($this->app->make(UserObserver::class));
         Vote::observe( new VoteObserver );
 	}
 

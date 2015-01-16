@@ -6,10 +6,11 @@
 
 @section('content')
 <div class="container">
-
-    <div class="jumbotron">
-        <h1>Newest Submissions</h1>
+    <!-- .page-header -->
+    <div class="page-header">
+        <h1>Latest Submissions</h1>
     </div>
+    <!-- /.page-header -->
 
     @foreach( $posts as $post )
         @include(Route::currentRouteName().'._loop')

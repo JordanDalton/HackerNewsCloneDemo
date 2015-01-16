@@ -18,7 +18,13 @@
     <div class="row">
         <!-- .col-lg-12 -->
         <div class="col-lg-12">
-
+            {!! Form::model($user) !!}
+                @include('admin.users._fields')
+                <!-- Submit Form Input -->
+                <div class="form-group">
+                    {!! Form::submit('Save', ['class' => 'btn btn-success']) !!}
+                </div>
+            {!! Form::close() !!}
         </div>
         <!-- /.col-lg-12 -->
     </div>
