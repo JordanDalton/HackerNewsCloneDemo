@@ -1,6 +1,5 @@
 <?php namespace App\Layouts;
 
-use Config;
 use Illuminate\Contracts\View\View;
 
 class FrontendLayoutComposer {
@@ -14,6 +13,6 @@ class FrontendLayoutComposer {
     public function compose( View $view )
     {
         $view->with('layout', 'layouts.default');
-        $view->with('site_name', Config::get('settings.site_name'));
+        $view->with('site_name', config('settings.site_name'));
     }
 } 

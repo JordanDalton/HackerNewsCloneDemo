@@ -1,5 +1,7 @@
 <?php namespace App\Roles;
 
+use App\Core\BasePresenter;
+
 class RolePresenter extends BasePresenter {
 
     /**
@@ -13,6 +15,16 @@ class RolePresenter extends BasePresenter {
     }
 
     /**
+     * Return the role's ID number.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->getWrappedObject()->id;
+    }
+
+    /**
      * Return the role name.
      *
      * @return string
@@ -20,5 +32,15 @@ class RolePresenter extends BasePresenter {
     public function getName()
     {
         return $this->getWrappedObject()->name;
+    }
+
+    /**
+     * Return the link to the role page.
+     *
+     * @return string
+     */
+    public function getShowLink()
+    {
+        return route('admin.roles.show', $this->getWrappedObject()->id);
     }
 } 

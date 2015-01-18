@@ -1,6 +1,7 @@
 <?php namespace App\Users;
 
 use App\Core\BasePresenter;
+use Carbon\Carbon;
 
 class UserPresenter extends BasePresenter {
 
@@ -14,6 +15,28 @@ class UserPresenter extends BasePresenter {
         $this->wrappedObject = $resource;
     }
 
+    public function getAbout( $raw = false )
+    {
+        // Obtain the about me text.
+        //
+        $about_me = $this->getWrappedObject()->about;
+
+        // Return the raw if requried.
+        //
+        if( $raw ) return $about_me;
+
+        // If $raw = true we will return the raw comment.
+        //
+        // Otherwise we will return it in a manner to where each new line
+        // will become a <br>. We will also prevent the <br> from being
+        // stripped out.
+        //
+        // This is what you would edit should you want additional tags such
+        // as links to be shown.
+        //
+        return strip_tags( nl2br( $about_me ), '<br>' );
+    }
+
     /**
      * Return the user's computed average
      *
@@ -21,7 +44,10 @@ class UserPresenter extends BasePresenter {
      */
     public function getAverage()
     {
-        return 2.5;
+        $karma = $this->getWrappedObject()->karma;
+        $days  = $this->getWrappedObject()->created_at->diffInDays(Carbon::now());
+
+        return ($karma !== $days && $days !== 0) ? number_format($karma / $days, 2) : $karma;
     }
 
     /**
@@ -32,6 +58,16 @@ class UserPresenter extends BasePresenter {
     public function getDurationSinceCreated()
     {
         return $this->getWrappedObject()->created_at->diffForHumans();
+    }
+
+    /**
+     * Return the link to edit the user's profile.
+     *
+     * @return string
+     */
+    public function getEditProfileLink()
+    {
+        return route('users.edit', $this->getWrappedObject()->username);
     }
 
     /**
@@ -61,7 +97,7 @@ class UserPresenter extends BasePresenter {
      */
     public function getKarmaScore()
     {
-        return 2203;
+        return $this->getWrappedObject()->karma;
     }
 
     /**

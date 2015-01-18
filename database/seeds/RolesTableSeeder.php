@@ -50,6 +50,7 @@ class RolesTableSeeder extends Seeder {
         foreach( $roles as $role )
         {
             $this->roles[] = [
+                'core'       => true,
                 'name'       => $role,
                 'created_at' => new DateTime
             ];

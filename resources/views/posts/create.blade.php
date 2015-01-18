@@ -1,6 +1,6 @@
 @extends($layout)
 
-@section('pageTitle')
+@section('page_title')
     Submit | @parent
 @stop
 

@@ -1,10 +1,11 @@
 <?php namespace App\Comments;
 
 use App\Core\RepositoryTrait;
+use App\Core\SoftDeleteRepositoryTrait;
 
 class CommentRepository implements CommentRepositoryInterface {
 
-    use RepositoryTrait;
+    use RepositoryTrait, SoftDeleteRepositoryTrait;
 
     /**
      * The comment model.
@@ -46,7 +47,7 @@ class CommentRepository implements CommentRepositoryInterface {
      */
     public function findByIdWith( $id , $with = [ ] , $columns = [ '*' ] )
     {
-        return $this->getModel()->with( $with )->findOrFail( $id , $columns );
+        return $this->getModel()->with( $with )->byUnbannedUser()->findOrFail( $id, $columns );
     }
 
     /**
@@ -72,5 +73,46 @@ class CommentRepository implements CommentRepositoryInterface {
     public function getPaginatedNewestWithReplies( $per_page = 15 , $columns = [ '*' ] )
     {
         return $this->getModel()->with(['post', 'replies', 'user'])->latest()->paginate( $per_page, $columns );
+    }
+
+    /**
+     * Fetch all comments records from the database and return in a paginated collection.
+     *
+     * @param int   $per_page The number of records you want to be shown on each page.
+     * @param array $columns  The columns of data you want returned.
+     *
+     * @return Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedResourceListing( $per_page = 15, $columns = [ '*' ])
+    {
+        return $this->getModel()->withTrashed()->with('user')->latest()->paginate( $per_page , $columns );
+    }
+
+    /**
+     * Fetch all comments records by provided search parameters from the database and return in a paginated collection.
+     *
+     * @param array $search_parameters The search parameters.
+     * @param int   $per_page The number of records you want to be shown on each page.
+     * @param array $columns  The columns of data you want returned.
+
+     * @return Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedResourceListingByCriteria( $search_parameters = [] , $per_page = 15, $columns = [ '*' ])
+    {
+        // We will begin building our query.
+        //
+        return $this->getModel()->withTrashed()->with('user')->latest()->criteria( $search_parameters )->paginate( $per_page, $columns );
+    }
+
+    /**
+     * Simply find a record by it's ID number. No related data will be eager-loaded.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function simplyFindById( $id )
+    {
+        return $this->getModel()->withTrashed()->findOrFail( $id );
     }
 } 

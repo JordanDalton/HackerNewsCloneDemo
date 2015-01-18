@@ -57,6 +57,31 @@ class Comment extends PresentableSoftDeleteModel {
     }
 
     /**
+     * Query scope that will fetch records that fall within
+     * a provided search criteria.
+     *
+     * @param Illuminate\Database\Eloquent\Builder $query
+     * @param array $search_parameters
+     */
+    public function scopeCriteria( $query, $search_parameters = [] )
+    {
+        return $query->where( function( $query ) use( $search_parameters )
+        {
+            // Iterate through the list of $search_parameters and generate
+            // a like statement for each.
+            //
+            foreach( $search_parameters as $field => $field_value )
+            {
+                // Ignore user_id with * as the value.
+                //
+                if( $field === 'user_id' && $field_value === '*') continue;
+
+                $query->where($field, 'like', "%$field_value%");
+            }
+        });
+    }
+
+    /**
      * Query scope that will filter out records where the user is banned.
      *
      * @param $query

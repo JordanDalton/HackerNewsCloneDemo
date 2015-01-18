@@ -13,145 +13,197 @@
 
 // Admin Namespace Routing Group
 //
-Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function()
+Route::group( [
+    'middleware' => [ 'auth' , 'roleGatekeeper' ] ,
+    'namespace'  => 'Admin' ,
+    'prefix'     => 'admin' ,
+    'roles'      => [ 'Administrators' , 'Moderators' ]
+] , function ()
 {
-    // Dashboard
+    // Admin Homepage
     //
-    Route::get('/', [
-        'as'    => 'admin.dashboard',
-        'uses'  => 'DashboardController@index'
-    ]);
+    Route::get( '/' , [
+        'as' => 'admin' ,
+        function ()
+        {
+            return redirect()->route( 'admin.dashboard.index' );
+        }
+    ] );
+
+    // Admin Dashboard
+    //
+    Route::get( 'dashboard' , [
+        'as'   => 'admin.dashboard.index' ,
+        'uses' => 'DashboardController@index'
+    ] );
 
     // Comments Controller
     //
-    Route::resource('comments', 'CommentsController');
+    Route::resource( 'comments' , 'CommentsController' );
 
     // Posts Resource
     //
-    Route::resource('posts', 'PostsController');
+    Route::resource( 'posts' , 'PostsController' );
 
     // Roles Resource
     //
-    Route::resource('roles', 'RolesController');
+    Route::resource( 'roles' , 'RolesController' );
 
     // Users Resource
     //
-    Route::resource('users', 'UsersController');
+    Route::resource( 'users' , 'UsersController' );
 
     // Votes Resource
     //
-    Route::resource('votes', 'VotesController');
-});
+    Route::resource( 'votes' , 'VotesController' );
+} );
 
 // Auth Namespace Routing Group
 //
-Route::group(['namespace' => 'Auth'], function()
+Route::group( [ 'namespace' => 'Auth' ] , function ()
 {
-    Route::get('verify-email/{email_authentication_code}', [
-        'as'    => 'auth.email.verify',
-        'uses'  => 'AuthController@getEmailVerify'
-    ]);
+    // When a user registers they will be sent a email verification code. When they
+    // visit the link it will take them to this page.
+    //
+    Route::get( 'verify-email/{email_authentication_code}' , [
+        'as'   => 'auth.email.verify' ,
+        'uses' => 'AuthController@getEmailVerify'
+    ] );
 
-    Route::get('login', [
-        'as'    => 'auth.login',
-        'uses'  => 'AuthController@getLogin',
-    ]);
+    // Login Page
+    //
+    Route::get( 'login' , [
+        'as'   => 'auth.login' ,
+        'uses' => 'AuthController@getLogin' ,
+    ] );
 
-    Route::post('login', [
-        'as'    => 'auth.login',
-        'uses'  => 'AuthController@postLogin',
-    ]);
+    // Process Login Page
+    //
+    Route::post( 'login' , [
+        'as'   => 'auth.login' ,
+        'uses' => 'AuthController@postLogin' ,
+    ] );
 
-    Route::get('logout', [
-        'as'    => 'logout',
-        'uses'  => 'AuthController@getLogout'
-    ]);
+    // Logout
+    //
+    Route::get( 'logout' , [
+        'as'   => 'logout' ,
+        'uses' => 'AuthController@getLogout'
+    ] );
 
-    Route::get('register', [
-        'as'    => 'auth.register',
-        'uses'  => 'AuthController@getRegister',
-    ]);
+    // Register
+    //
+    Route::get( 'register' , [
+        'as'   => 'auth.register' ,
+        'uses' => 'AuthController@getRegister' ,
+    ] );
 
-    Route::post('register', [
-        'as'    => 'auth.register',
-        'uses'  => 'AuthController@postRegister',
-    ]);
-});
+    // Process Registration
+
+    Route::post( 'register' , [
+        'as'   => 'auth.register' ,
+        'uses' => 'AuthController@postRegister' ,
+    ] );
+} );
 
 // Posts Namespace Routing Group
 //
-Route::group(['namespace' => 'Posts'], function()
+Route::group( [ 'namespace' => 'Posts' ] , function ()
 {
-    Route::get('/', [
-        'as'    => 'posts.index',
-        'uses'  => 'PostsController@index'
-    ]);
+    // Ranked Posts
+    //
+    Route::get( '/' , [
+        'as'   => 'posts.index' ,
+        'uses' => 'PostsController@index'
+    ] );
 
-    Route::get('{id}', [
-        'as'    => 'posts.show',
-        'uses'  => 'PostsController@show'
-    ])->where('id', '\d+');
+    // View Post
+    //
+    Route::get( '{id}' , [
+        'as'   => 'posts.show' ,
+        'uses' => 'PostsController@show'
+    ] )->where( 'id' , '\d+' );
 
-    Route::get('ask', [
-        'as'     => 'posts.ask',
-        'uses'  => 'PostsController@ask'
-    ]);
+    // List posts where they ask the community.
+    //
+    Route::get( 'ask' , [
+        'as'   => 'posts.ask' ,
+        'uses' => 'PostsController@ask'
+    ] );
 
-    Route::get('newest', [
-        'as'     => 'posts.newest',
-        'uses'  => 'PostsController@newest'
-    ]);
+    // List the latest posts.
+    //
+    Route::get( 'newest' , [
+        'as'   => 'posts.newest' ,
+        'uses' => 'PostsController@newest'
+    ] );
 
-    Route::get('show', [
-       'as'     => 'posts.show_off',
-        'uses'  => 'PostsController@show_off'
-    ]);
+    // List posts where the user wants to show off a site.
+    //
+    Route::get( 'show' , [
+        'as'   => 'posts.show_off' ,
+        'uses' => 'PostsController@show_off'
+    ] );
 
-    Route::get('submit', [
-        'as'         => 'posts.create',
-        'middleware' => ['auth'],
-        'uses'       => 'PostsController@create'
-    ]);
+    // Submit a new post.
+    //
+    Route::get( 'submit' , [
+        'as'         => 'posts.create' ,
+        'middleware' => [ 'auth' , 'roleGatekeeper' ] ,
+        'uses'       => 'PostsController@create' ,
+        'roles'      => [ 'Administrators' , 'Moderators' , 'Users' ]
+    ] );
 
-    Route::post('submit', [
-        'as'         => 'posts.create',
-        'middleware' => ['auth'],
-        'uses'       => 'PostsController@store'
-    ]);
+    // Process new post submission.
+    //
+    Route::post( 'submit' , [
+        'as'         => 'posts.create' ,
+        'middleware' => [ 'auth' , 'roleGatekeeper' ] ,
+        'uses'       => 'PostsController@store' ,
+        'roles'      => [ 'Administrators' , 'Moderators' , 'Users' ]
+    ] );
 
-    Route::post('{id}/vote', [
-        'as'    => 'posts.vote',
-        'uses'  => 'PostsController@vote'
-    ]);
-});
+    // Cast vote towards post.
+    //
+    Route::post( '{id}/vote' , [
+        'as'         => 'posts.vote' ,
+        'middleware' => [ 'auth' , 'roleGatekeeper' ] ,
+        'uses'       => 'PostsController@vote' ,
+        'roles'      => [ 'Administrators' , 'Moderators' , 'Users' ]
+    ] );
+} );
 
 // Comments Resource
 //
-Route::resource('comments', 'Comments\CommentsController');
+Route::resource( 'comments' , 'Comments\CommentsController' );
 
 // Comments Namespace Routing Group
 //
-Route::group(['namespace' => 'Comments'], function()
+Route::group( [ 'namespace' => 'Comments' ] , function ()
 {
-    Route::get('newcomments', [
-        'as'    => 'comments.newest',
-        'uses'  => 'CommentsController@newest'
-    ]);
+    // Latest Comments
+    //
+    Route::get( 'newcomments' , [
+        'as'   => 'comments.newest' ,
+        'uses' => 'CommentsController@newest'
+    ] );
 
-    Route::post('comments/{id}/vote', [
-        'as'    => 'comments.vote',
-        'uses'  => 'CommentsController@vote'
-    ]);
-});
+    // Cate vote toward comment.
+    //
+    Route::post( 'comments/{id}/vote' , [
+        'as'   => 'comments.vote' ,
+        'uses' => 'CommentsController@vote'
+    ] );
+} );
 
 // User Namespace Routing Group
 //
-Route::group(['namespace' => 'Users'], function()
+Route::group( [ 'namespace' => 'Users' ] , function ()
 {
     // The Users Resource
     //
-    Route::resource('users', 'UsersController');
-});
+    Route::resource( 'users' , 'UsersController' );
+} );
 
 /*
 Route::get('/', 'WelcomeController@index');

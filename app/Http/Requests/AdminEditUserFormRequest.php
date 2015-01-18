@@ -23,8 +23,8 @@ class AdminEditUserFormRequest extends Request {
 	public function rules()
 	{
 		return [
-            'username'  => 'required|unique:users,username,'    . $this->segment(2),
-            'email'     => 'required|email|unique:users,email,' . $this->segment(2),
+            'username'  => 'required|unique:users,username,'    . $this->segment(3),
+            'email'     => 'required|email|unique:users,email,' . $this->segment(3),
             'password'  => 'min:6|confirmed',
             'restore'   => 'boolean'
 		];

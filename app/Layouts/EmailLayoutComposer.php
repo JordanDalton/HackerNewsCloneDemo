@@ -1,6 +1,5 @@
 <?php namespace App\Layouts;
 
-use Config;
 use Illuminate\Contracts\View\View;
 
 class EmailLayoutComposer {
@@ -13,6 +12,6 @@ class EmailLayoutComposer {
      */
     public function compose( View $view )
     {
-        $view->with('site_name', Config::get('settings.site_name'));
+        $view->with('site_name', config('settings.site_name'));
     }
 } 

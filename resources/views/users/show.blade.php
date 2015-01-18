@@ -1,7 +1,7 @@
 @extends($layout)
 
 {{-- Set the title of the page. --}}
-@section('pageTitle')
+@section('page_title')
     {{ $user->getUsername() }} | @parent
 @stop
 
@@ -14,7 +14,7 @@
         <div class="col-lg-12">
             <div class="jumbotron">
                 <h1><i class="fa fa-user"></i> {{ $user->getUsername() }}</h1>
-                <dl class="dl-horizontal" style="background:#eee">
+                <dl class="dl-horizontal">
                     <dt>Joined</dt>
                     <dd>{{ $user->getDurationSinceCreated() }}</dd>
                     <dt>Karma</dt>
@@ -22,9 +22,9 @@
                     <dt>Avg</dt>
                     <dd>{{ $user->getAverage() }}</dd>
                     <dt>About</dt>
-                    <dd>@twitter</dd>
-                    <dd><a href="#">submissions</a></dd>
-                    <dd><a href="#">comments</a></dd>
+                    <dd>{!! $user->getAbout() !!}</dd>
+                    <dd><a class="underlined" href="#">submissions</a></dd>
+                    <dd><a class="underlined" href="#">comments</a></dd>
                 </dl>
             </div>
         </div>

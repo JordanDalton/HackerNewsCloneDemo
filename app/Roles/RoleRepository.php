@@ -1,22 +1,49 @@
 <?php namespace App\Roles;
 
+use App\Core\RepositoryTrait;
+use App\Core\SoftDeleteRepositoryTrait;
+
 class RoleRepository implements RoleRepositoryInterface {
+
+    use RepositoryTrait, SoftDeleteRepositoryTrait;
 
     /**
      * The role model.
      *
      * @var Role
      */
-    protected $role;
+    protected $model;
 
     /**
      * Create new RoleRepository instance.
      *
-     * @param Role $role
+     * @param Role $model
      */
-    public function __construct( Role $role )
+    public function __construct( Role $model )
     {
-        $this->role = $role;
+        $this->model = $model;
+    }
+
+    /**
+     * Find a role by it's ID number.
+     *
+     * @param $id
+     */
+    public function findById( $id )
+    {
+        return $this->getModel()->withTrashed()->findOrFail( $id );
+    }
+
+    /**
+     * Find a non-core role by it's ID number.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function findNonCoreRoleById( $id )
+    {
+        return $this->getModel()->nonCore()->findOrFail( $id );
     }
 
     /**
@@ -26,7 +53,7 @@ class RoleRepository implements RoleRepositoryInterface {
      */
     public function getIdList()
     {
-        return $this->role->lists('id');
+        return $this->getModel()->lists('id');
     }
 
     /**
@@ -36,7 +63,7 @@ class RoleRepository implements RoleRepositoryInterface {
      */
     public function getList()
     {
-        return $this->role->lists('name', 'id');
+        return $this->getModel()->lists('name', 'id');
     }
 
     /**
@@ -48,16 +75,33 @@ class RoleRepository implements RoleRepositoryInterface {
      */
     public function getPaginated( $perPage = 15 )
     {
-        return $this->role->paginate( $perPage );
+        return $this->getModel()->paginate( $perPage );
     }
 
     /**
-     * Return the table name of the model.
+     * Fetch all roles records from the database and return in a paginated collection.
      *
-     * @return string
+     * @param int   $per_page The number of records you want to be shown on each page.
+     * @param array $columns  The columns of data you want returned.
+     *
+     * @return Illuminate\Pagination\LengthAwarePaginator
      */
-    public function getTableName()
+    public function getPaginatedResourceListing( $per_page = 15, $columns = [ '*' ])
     {
-        return $this->role->getTable();
+        return $this->getModel()->with('users')->latest()->paginate( $per_page , $columns );
+    }
+
+    /**
+     * Fetch all roles records by provided search criteria from the database and return in a paginated collection.
+     *
+     * @param string $criteria The role provided search criteria
+     * @param int   $per_page The number of records you want to be shown on each page.
+     * @param array $columns  The columns of data you want returned.
+     *
+     * @return Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedResourceListingByCriteria( $criteria, $per_page = 15, $columns = [ '*' ])
+    {
+        return $this->getModel()->with('users')->criteria($criteria)->latest()->paginate( $per_page , $columns );
     }
 }

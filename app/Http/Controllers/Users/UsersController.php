@@ -1,24 +1,38 @@
 <?php namespace App\Http\Controllers\Users;
 
+use App\Exceptions\NotAllowedException;
 use App\Http\Requests;
+use App\Http\Requests\EditUserFormRequest;
 use App\Users\UserRepositoryInterface;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Auth;
+use App;
 
 class UsersController extends Controller {
 
     /**
+     * The user repository implementation.
+     *
      * @var \App\Users\UserRepositoryInterface
      */
     private $userRepository;
 
     /**
+     * @var \Illuminate\Http\Request
+     */
+    protected $request;
+
+    /**
      * Create new UsersController instance.
      *
      * @param UserRepositoryInterface $userRepository
+     * @param Request                 $request
      */
-    public function __construct( UserRepositoryInterface $userRepository )
+    public function __construct( UserRepositoryInterface $userRepository , Request $request )
     {
         $this->userRepository = $userRepository;
+        $this->request        = $request;
 
         // Require the user to be logged with the show method being the only exception
         //
@@ -91,21 +105,35 @@ class UsersController extends Controller {
         //
         $user = $this->userRepository->findByUsername( $id );
 
+        // Check if the users trying to access this page is NOT the account holder.
+        //
+        if ( $user->isNotAccountHolder() )
+        {
+            return App::abort('403', 'Unauthorized action.');
+        }
+
         // Show the page.
         //
-        return routeView()->withUser($user);
+        return routeView()->withUser( $user );
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  int $id
+     * @param  int                $id
+     * @param EditUserFormRequest $request
      *
      * @return Response
      */
-    public function update( $id )
+    public function update( $id , EditUserFormRequest $request )
     {
+        // Fetch the user record from the database.
         //
+        $user = $this->userRepository->simplyFindByUsername( $id );
+
+        // Update the user record.
+        //
+        $this->userRepository->updateRecord( $user, $request->only('username', 'email', 'about', 'password') );
     }
 
     /**
@@ -119,5 +147,4 @@ class UsersController extends Controller {
     {
         //
     }
-
 }

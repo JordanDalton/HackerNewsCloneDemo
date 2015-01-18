@@ -1,7 +1,6 @@
 <?php namespace App\Posts;
 
 use Auth;
-use Config;
 use Illuminate\Support\Str;
 
 class PostObserver {
@@ -43,13 +42,25 @@ class PostObserver {
     }
 
     /**
+     * Observe when a post record has been saved/
+     *
+     * @param Post $post
+     */
+    public function saved( $post )
+    {
+        // Since the user has made a post we will reward them with some more karma.
+        //
+        $post->user->incrementKarma();
+    }
+
+    /**
      * Obtain the show title prefix value from config/settings.php.
      *
      * @return string
      */
     private function getShowTitlePrefix()
     {
-        return Config::get('settings.show_title_prefix');
+        return config('settings.show_title_prefix');
     }
 
     /**

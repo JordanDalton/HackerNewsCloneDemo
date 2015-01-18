@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ route('posts.index') }}">Hacker News Clone</a>
+            <a class="navbar-brand" href="{{ route('posts.index') }}">{{ $site_name }}</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -18,6 +18,25 @@
                 <li class="{{ isActiveRouteName('posts.ask') }}"><a href="{{ route('posts.ask') }}">ask</a></li>
                 <li class="{{ isActiveRouteName('posts.create') }}"><a href="{{ route('posts.create') }}">submit</a></li>
             </ul>
+            @if( ! Auth::check() )
+            <ul class="nav navbar-nav pull-right">
+                <li class="{{ isActiveRouteName('auth.login') }}"><a href="{{ route('auth.login') }}"><i class="fa fa-sign-in"></i> login</a></li>
+                <li class="{{ isActiveRouteName('auth.register') }}"><a href="{{ route('auth.register') }}"><i class="fa fa-arrow-right"></i> Join</a></li>
+            </ul>
+            @else
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown">
+                    <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-user"></i> {{ Auth::user()->username }} <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="{{ Auth::user()->present()->getEditProfileLink() }}"><i class="fa fa-cogs"></i> Settings</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{{ Auth::user()->present()->getProfileLink() }} "><i class="fa fa-user"></i> My Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out"></i> Log out</a></li>
+                    </ul>
+                </li>
+            </ul>
+            @endif
         </div><!--/.nav-collapse -->
     </div><!--/.container-fluid -->
 </nav>

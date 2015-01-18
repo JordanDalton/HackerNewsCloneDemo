@@ -1,7 +1,6 @@
 <?php namespace App\Dispatchers;
 
 use App\Users\User;
-use Config;
 use Illuminate\Contracts\Mail\MailQueue;
 
 class EmailDispatcher {
@@ -39,7 +38,7 @@ class EmailDispatcher {
         $this->mailQueue->queue('emails.auth.email.verification', $data, function( $message ) use( $user )
         {
             $message->to( $user->email, $user->username )
-                    ->subject('Thank you for joining ' . Config::get('settings.site_name'));
+                    ->subject('Thank you for joining ' . config('settings.site_name'));
         });
     }
 } 

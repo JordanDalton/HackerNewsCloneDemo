@@ -15,6 +15,14 @@
             'data' : {
                 'now'   : $.now(),
                 '_token': '{{ csrf_token() }}'
+            },
+            beforeSend: function(xhr)
+            {
+                {{-- If the user is not logged in then pop up a modal window. --}}
+                @if( ! Auth::check())
+                    $('#loginRequiredModal').modal('show');
+                    xhr.abort();
+                @endif
             }
         }).done(function(response)
         {

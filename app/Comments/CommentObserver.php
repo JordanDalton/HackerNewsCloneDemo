@@ -15,4 +15,17 @@ class CommentObserver {
         //
         $comment->user_id = Auth::id();
     }
+
+    /**
+     * Observe when a comment record has been saved.
+     *
+     * @param $comment
+     */
+    public function saved( $comment )
+    {
+        // Since the user has posted a comment we will reward them
+        // with some karma.
+        //
+        $comment->user->incrementKarma();
+    }
 } 

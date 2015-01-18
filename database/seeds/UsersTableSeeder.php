@@ -83,6 +83,7 @@ class UsersTableSeeder extends Seeder {
             'email_authenticated'       => true ,
             'email_authenticated_at'    => new DateTime,
             'email_authentication_code' => $this->userRepository->getModel()->generateUniqueEmailAuthenticationCode() ,
+            'karma'                     => $this->faker->randomDigitNotNull,
             'password'                  => Hash::make( 'password' ) ,
             'username'                  => 'Administrator'
         ];
@@ -108,6 +109,7 @@ class UsersTableSeeder extends Seeder {
                 'email_authenticated'       => $email_authenticated ,
                 'email_authenticated_at'    => $email_authenticated ? new DateTime : null,
                 'email_authentication_code' => $this->userRepository->getModel()->generateUniqueEmailAuthenticationCode() ,
+                'karma'                     => $this->faker->randomDigitNotNull,
                 'password'                  => Hash::make( 'password' ) ,
                 'username'                  => "user{$index}" ,
             ];

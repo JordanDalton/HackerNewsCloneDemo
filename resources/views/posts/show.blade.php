@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 {{-- Set the title of the page. --}}
-@section('pageTitle')
+@section('page_title')
     {{ $post->getTitle() }} | @parent
 @stop
 

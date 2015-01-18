@@ -15,6 +15,7 @@ class CreateVotesTable extends Migration {
 		Schema::create('votes', function(Blueprint $table)
 		{
 			$table->increments('id');
+            $table->timestamp('deleted_at')->nullable();
             $table->integer('voteable_id');
             $table->string('voteable_type');
             $table->boolean('vote_applied')->default(true);

@@ -1,6 +1,7 @@
 <?php namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler {
@@ -42,6 +43,22 @@ class Handler extends ExceptionHandler {
 		}
 		else
 		{
+            // If the user attempts to access a record that is not permissible or does not
+            // exist we will need to send them back to the homepage.
+            //
+            if ( $e instanceof ModelNotFoundException )
+            {
+                $nonExistentMessage = 'The page you attempted to access does not exist or has been removed.';
+
+                // Return json response if
+                if ( $request->ajax() )
+                {
+                    return response()->make(['error' => 404, 'message' => $nonExistentMessage], 404);
+                }
+
+                return response()->make(view('errors.404'), 404);
+            }
+
 			return parent::render($request, $e);
 		}
 	}

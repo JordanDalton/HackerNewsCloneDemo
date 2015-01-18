@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration {
 		Schema::create('users', function(Blueprint $table)
 		{
             $table->increments('id');
+            $table->text('about')->nullable();
             $table->boolean('active')->default(0);
             $table->timestamp('created_at');
             $table->timestamp('deleted_at')->nullable();
@@ -22,6 +23,7 @@ class CreateUsersTable extends Migration {
 			$table->boolean('email_authenticated')->default(0);
 			$table->timestamp('email_authenticated_at')->nullable();
 			$table->string('email_authentication_code', 60)->unique();
+            $table->integer('karma')->unsigned()->default(0);
 			$table->string('password', 60);
             $table->string('remember_token', 100)->nullable();
             $table->string('username')->unique();

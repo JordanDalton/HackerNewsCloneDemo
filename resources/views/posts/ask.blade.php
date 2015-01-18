@@ -1,6 +1,6 @@
 @extends('layouts.default')
 
-@section('pageTitle')
+@section('page_title')
     Ask | @parent
 @stop
 

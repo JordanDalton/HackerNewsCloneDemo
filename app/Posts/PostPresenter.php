@@ -1,7 +1,6 @@
 <?php namespace App\Posts;
 
 use App\Core\BasePresenter;
-use Config;
 use Lang;
 
 class PostPresenter extends BasePresenter {
@@ -47,6 +46,16 @@ class PostPresenter extends BasePresenter {
     }
 
     /**
+     * Return the link to the page that the votes was casted to.
+     *
+     * @return string
+     */
+    public function getLinkToVotedRecord()
+    {
+        return $this->getLinkToPost();
+    }
+
+    /**
      * Return the url to the post.
      *
      * @return string
@@ -67,8 +76,8 @@ class PostPresenter extends BasePresenter {
 
         switch(true)
         {
-            case $this->isQuestion(): $prefix = Config::get('settings.ask_title_prefix');  break;
-            case $this->isShow():     $prefix = Config::get('settings.show_title_prefix'); break;
+            case $this->isQuestion(): $prefix = config('settings.ask_title_prefix');  break;
+            case $this->isShow():     $prefix = config('settings.show_title_prefix'); break;
         }
 
         return $prefix . $this->getWrappedObject()->title;
@@ -133,6 +142,16 @@ class PostPresenter extends BasePresenter {
     }
 
     /**
+     * Return the voteable type.
+     *
+     * @return string
+     */
+    public function getVoteableType()
+    {
+        return 'Post';
+    }
+
+    /**
      * Return the number of votes.
      *
      * @return int
@@ -170,6 +189,16 @@ class PostPresenter extends BasePresenter {
     public function hasText()
     {
         return (bool) $this->getWrappedObject()->text;
+    }
+
+    /**
+     * Return if the post is a ask (ask the community) post.
+     *
+     * @return boolean
+     */
+    public function isAsk()
+    {
+        return $this->getWrappedObject()->ask;
     }
 
     /**

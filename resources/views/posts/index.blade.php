@@ -1,11 +1,14 @@
 @extends('layouts.default')
 
-@section('pageTitle')
+@section('page_title')
     Welcome | @parent
 @stop
 
 @section('content')
 <div class="container">
+
+    @include('layouts.partials.errors')
+
     <div class="jumbotron">
         <h1>Hacker News Clone</h1>
         <p><strong>{{ $site_name }}</strong> is a simple yet powerful script that allows you create your own socially driven content website. This script is built on <a href="http://www.laravel.com">Laravel 5</a>, one of the most modern development frameworks in the history of PHP. With this script you can be online and running in a matter of minutes. <br/></p>

@@ -1,7 +1,6 @@
 <?php namespace App\Comments;
 
 use App\Core\BasePresenter;
-use Illuminate\Support\Str;
 
 class CommentPresenter extends BasePresenter {
 
@@ -37,6 +36,24 @@ class CommentPresenter extends BasePresenter {
         // as links to be shown.
         //
         return strip_tags( nl2br( $comment ), '<br>' );
+    }
+
+    /**
+     * Return the comment in limited, short form.
+     *
+     * @param int $characters
+     *
+     * @return string
+     */
+    public function getCommentShort( $characters = 65 )
+    {
+        // Obtain the comment and strip out any html tags.
+        //
+        $comment = strip_tags( $this->getWrappedObject()->comment );
+
+        // Return the limited comment string.
+        //
+        return str_limit( $comment , $characters );
     }
 
     /**
@@ -102,6 +119,15 @@ class CommentPresenter extends BasePresenter {
         return route('comments.show', $this->getWrappedObject()->parent_id);
     }
 
+    /**
+     * Return the link to the page that the votes was casted to.
+     *
+     * @return string
+     */
+    public function getLinkToVotedRecord()
+    {
+        return $this->getLinkToComment();
+    }
 
     /**
      * Return the parent id of the comment.
@@ -131,7 +157,17 @@ class CommentPresenter extends BasePresenter {
      */
     public function getTitleFriendlyComment()
     {
-        return Str::limit( $this->getComment(true), 45 );
+        return str_limit( $this->getComment(true), 45 );
+    }
+
+    /**
+     * Return the voteable type.
+     *
+     * @return string
+     */
+    public function getVoteableType()
+    {
+        return 'Comment';
     }
 
     /**

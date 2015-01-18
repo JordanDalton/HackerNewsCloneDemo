@@ -1,11 +1,12 @@
 <?php namespace App\Posts;
 
 use App\Core\RepositoryTrait;
+use App\Core\SoftDeleteRepositoryTrait;
 use DB;
 
 class PostRepository implements PostRepositoryInterface {
 
-    use RepositoryTrait;
+    use RepositoryTrait, SoftDeleteRepositoryTrait;
 
     /**
      * @var Post
@@ -159,6 +160,35 @@ class PostRepository implements PostRepositoryInterface {
     }
 
     /**
+     * Fetch all comments records from the database and return in a paginated collection.
+     *
+     * @param int   $per_page The number of records you want to be shown on each page.
+     * @param array $columns  The columns of data you want returned.
+     *
+     * @return Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedResourceListing( $per_page = 15, $columns = [ '*' ])
+    {
+        return $this->getModel()->withTrashed()->with('user')->latest()->paginate( $per_page , $columns );
+    }
+
+    /**
+     * Fetch all posts records by provided search parameters from the database and return in a paginated collection.
+     *
+     * @param array $search_parameters The search parameters.
+     * @param int   $per_page The number of records you want to be shown on each page.
+     * @param array $columns  The columns of data you want returned.
+
+     * @return Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedResourceListingByCriteria( $search_parameters = [] , $per_page = 15, $columns = [ '*' ])
+    {
+        // We will begin building our query.
+        //
+        return $this->getModel()->withTrashed()->with('user')->latest()->criteria( $search_parameters )->paginate( $per_page, $columns );
+    }
+
+    /**
      * Fetch the newest records and return them in paginated form. Related user and comments will be in the results as well.
      *
      * @param int   $per_page The number of record to show on each page.
@@ -196,5 +226,17 @@ class PostRepository implements PostRepositoryInterface {
     public function getPaginatedWithUserAndComments( $per_page = 15 , $columns = [ '*' ] )
     {
         return $this->getPaginatedRankWith(['comments', 'user'], $per_page, $columns);
+    }
+
+    /**
+     * Find a post record simply by it's ID number. No other data will be eager-loaded.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function simplyFindById( $id )
+    {
+        return $this->getModel()->withTrashed()->findOrFail( $id );
     }
 } 

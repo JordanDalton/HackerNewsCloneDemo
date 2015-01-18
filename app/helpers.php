@@ -1,6 +1,17 @@
 <?php
 
 /**
+ *
+ * @param array $parameters
+ *
+ * @return array
+ */
+function dropBlankArrayValues( $parameters = [] )
+{
+    return array_filter($parameters, 'strlen');
+}
+
+/**
  * A defined list of usernames that we will not allowed to be registered.
  *
  * @return array
@@ -42,6 +53,41 @@ function hasError( $name , Illuminate\Support\ViewErrorBag $errors )
 function isActiveRouteName( $routeName , $trueReturn = 'active' , $falseReturn = '#' )
 {
     return Route::currentRouteName() === $routeName ? $trueReturn : $falseReturn;
+}
+
+/**
+ * Take a list of keywords and filter out any that are blank.
+ *
+ * @param array $keywords
+ *
+ * @return array
+ */
+function keywords( $keywords = [] )
+{
+    return dropBlankArrayValues( $keywords );
+}
+
+/**
+ * Generate an array of key words from a given string.
+ *
+ * @param string $string
+ * @return array
+ */
+function keywordsFromString( $string = '' )
+{
+    return keywords(explode(' ', $string));
+}
+
+/**
+ * Return if a specified route name is not the current route name.
+ *
+ * @param $name
+ *
+ * @return bool
+ */
+function routeNameIsNot( $name )
+{
+    return Route::currentRouteName() !== $name;
 }
 
 /**

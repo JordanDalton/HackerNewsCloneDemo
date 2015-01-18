@@ -1,10 +1,12 @@
 <?php namespace App\Users;
 
 use App\Core\RepositoryTrait;
+use App\Core\SoftDeleteRepositoryTrait;
+use App\Roles\Role;
 
 class UserRepository implements UserRepositoryInterface {
 
-    use RepositoryTrait;
+    use RepositoryTrait, SoftDeleteRepositoryTrait;
 
     /**
      * The user model.
@@ -24,6 +26,19 @@ class UserRepository implements UserRepositoryInterface {
     }
 
     /**
+     * Assign/Synchronize roles to a given user account.
+     *
+     * @param User  $record
+     * @param array $roles
+     *
+     * @return array
+     */
+    public function attachRoles( $record, $roles = [] )
+    {
+        return $record->roles()->sync( $roles );
+    }
+
+    /**
      * Find a specific user record by it's ID number.
      *
      * @param $id
@@ -36,13 +51,41 @@ class UserRepository implements UserRepositoryInterface {
     }
 
     /**
+     * Find a specific user record by it's ID number. We will include their assigned
+     * roles in the response data as well.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function findByIdWithRoles( $id )
+    {
+        return $this->getModel()->with('roles')->withTrashed()->findOrFail( $id );
+    }
+
+    /**
      * Find a specific user record by it's username.
      *
      * @param mixed $username
      */
     public function findByUsername( $username )
     {
-        return $this->getModel()->whereUsername( $username )->firstOrFail();
+        return $this->getModel()->unbanned()->whereUsername( $username )->firstOrFail();
+    }
+
+    /**
+     * Search within a role for users based on a supplied search criteria.
+     *
+     * @param Role   $role     The role model.
+     * @param string $criteria The search criteria.
+     * @param int    $per_page The number of records to show on each page.
+     * @param array  $columns  The columns we want returned.
+     *
+     * @return mixed
+     */
+    public function findWithinRoleByCriteria( Role $role, $criteria = '' , $per_page = 15, $columns = [ '*' ] )
+    {
+        return $role->users()->criteria( $criteria )->paginate( $per_page, $columns );
     }
 
     /**
@@ -52,15 +95,44 @@ class UserRepository implements UserRepositoryInterface {
      */
     public function getIdList()
     {
-        return $this->model->lists('id');
+        return $this->getModel()->lists('id');
+    }
+
+    /**
+     * Return a list of all users.
+     *
+     * @return array
+     */
+    public function getList()
+    {
+        return $this->getModel()->lists('username', 'id');
     }
 
     /**
      * Fetch all users records from the database and return in a paginated collection.
+     *
+     * @param int   $per_page The number of records you want to be shown on each page.
+     * @param array $columns  The columns of data you want returned.
+     *
+     * @return Illuminate\Pagination\LengthAwarePaginator
      */
     public function getPaginatedResourceListing( $per_page = 15, $columns = [ '*' ])
     {
-        return $this->getModel()->latest()->paginate( $per_page , $columns );
+        return $this->getModel()->withTrashed()->latest()->paginate( $per_page , $columns );
+    }
+
+    /**
+     * Fetch all users records by provided search criteria from the database and return in a paginated collection.
+     *
+     * @param array $criteria The user provided search parameters.
+     * @param int   $per_page The number of records you want to be shown on each page.
+     * @param array $columns  The columns of data you want returned.
+     *
+     * @return Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedResourceListingByCriteria( $criteria = [], $per_page = 15, $columns = [ '*' ])
+    {
+        return $this->getModel()->withTrashed()->criteria($criteria)->latest()->paginate( $per_page , $columns );
     }
 
     /**
@@ -91,4 +163,15 @@ class UserRepository implements UserRepositoryInterface {
         ])->save();
     }
 
+    /**
+     * Find a user record simply by it's username. No other data will be eager-loaded.
+     *
+     * @param string $username
+     *
+     * @return mixed
+     */
+    public function simplyFindByUsername( $username )
+    {
+        return $this->getModel()->withTrashed()->whereUsername( $username )->firstOrFail();
+    }
 } 
