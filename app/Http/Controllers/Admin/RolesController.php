@@ -96,7 +96,7 @@ class RolesController extends Controller {
     {
         // Capture any supplied search criteria.
         //
-        $criteria = Input::get( 'criteria' );
+        $criteria = Input::get( 'user', [] );
 
         // Fetch the role with all assigned users.
         //

@@ -104,4 +104,14 @@ class RoleRepository implements RoleRepositoryInterface {
     {
         return $this->getModel()->with('users')->criteria($criteria)->latest()->paginate( $per_page , $columns );
     }
+
+    /**
+     * Return all roles and include users data in the return.
+     *
+     * @return mixed
+     */
+    public function getRolesWithCounts()
+    {
+        return $this->getModel()->with('users')->get();
+    }
 }

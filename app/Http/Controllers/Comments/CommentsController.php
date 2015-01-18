@@ -104,6 +104,22 @@ class CommentsController extends Controller {
     }
 
     /**
+     * Show all of the comment threads started by the in sessino user.
+     *
+     * @return Response
+     */
+    public function threads()
+    {
+        // Fetch the newest comments records form the database.
+        //
+        $comments = $this->commentRepository->getPaginatedNewestWithRepliesByUserId( Auth::id() );
+
+        // Show the page.
+        //
+        return routeView()->withComments( $comments );
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int $id

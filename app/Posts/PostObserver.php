@@ -5,6 +5,19 @@ use Illuminate\Support\Str;
 
 class PostObserver {
 
+    /*
+     * Observe when a post record has been deleted.
+     *
+     * @param $post
+     */
+    public function deleted( $post )
+    {
+        // Since the user had their post deleted we will have to
+        // take away some karma :(
+        //
+        $post->user->decrementKarma();
+    }
+
     /**
      * Observe when a post record is in the process of being saved.
      *

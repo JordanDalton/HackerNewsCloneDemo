@@ -229,6 +229,40 @@ class PostRepository implements PostRepositoryInterface {
     }
 
     /**
+     * Fetch all records and return them in paginated form. Related user and comments will be in the results as well.
+     *
+     * @param int   $user_id  The user's ID number.
+     * @param int   $per_page The number of record to show on each page.
+     * @param array $columns  The columns that we want returned.
+     *
+     * @return Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedWithUserAndCommentsByUserId( $user_id, $per_page = 15 , $columns = [ '*' ] )
+    {
+        return $this->getModel()->with( ['comments', 'user'] )->ranked()->byUnbannedUser()->whereUserId( $user_id )->paginate( $per_page , $columns );
+    }
+
+    /**
+     * Get today's ask posts count.
+     *
+     * @return mixed
+     */
+    public function getTodaysAskPostCount()
+    {
+        return $this->getModel()->ask()->byUnbannedUser()->today()->count();
+    }
+
+    /**
+     * Get today's show posts count.
+     *
+     * @return mixed
+     */
+    public function getTodaysShowPostCount()
+    {
+        return $this->getModel()->show()->byUnbannedUser()->today()->count();
+    }
+
+    /**
      * Find a post record simply by it's ID number. No other data will be eager-loaded.
      *
      * @param $id

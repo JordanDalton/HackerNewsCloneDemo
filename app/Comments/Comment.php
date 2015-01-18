@@ -82,6 +82,16 @@ class Comment extends PresentableSoftDeleteModel {
     }
 
     /**
+     * Return the record of the user that made the comment.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo( User::class );
+    }
+
+    /**
      * Query scope that will filter out records where the user is banned.
      *
      * @param $query
@@ -94,16 +104,6 @@ class Comment extends PresentableSoftDeleteModel {
         {
             return $query->unbanned();
         } );
-    }
-
-    /**
-     * Return the record of the user that made the comment.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
-    {
-        return $this->belongsTo( User::class );
     }
 
     /**

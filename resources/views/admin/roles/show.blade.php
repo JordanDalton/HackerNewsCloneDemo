@@ -2,7 +2,7 @@
 
 {{-- Set the page title --}}
 @section('page_title')
-{{ $role->getName() }} Users | @parent
+    {{ $role->getName() }} Users | @parent
 @stop
 
 @section('content')
@@ -19,7 +19,7 @@
 
     <!-- .page-header -->
     <div class="page-header">
-        <h1>{{ $role->getName() }} <small>User List</small></h1>
+        <h1>{{ $role->getName() }} Role <small>User List</small></h1>
     </div>
     <!-- /.page-header -->
 
@@ -29,7 +29,32 @@
         <!-- .col-lg-12 -->
         <div class="col-lg-12">
 
-            @include('layouts.partials.searchform')
+
+            <h3>Search <small>For Users Within This Role</small></h3>
+            {!! Form::open(['method' => 'GET']) !!}
+            <!-- .row -->
+            <div class="row">
+                {{-- Make the user aware of any search filters being applied to the results. --}}
+                @include('layouts.partials.search_filters_applied', ['searchGroup' => 'user'])
+
+                <!-- .col-lg-4 -->
+                <div class="col-lg-4">
+                    {!! Form::text('user[username]', Input::get('user.username', ''), ['class' => 'form-control', 'placeholder' => 'johnSmith']) !!}
+                </div>
+                <!-- /.col-lg-4 -->
+                <!-- .col-lg-4 -->
+                <div class="col-lg-4">
+                    {!! Form::text('user[email]', Input::get('user.email', ''), ['class' => 'form-control', 'placeholder' => 'john.smith@johnsmith.com']) !!}
+                </div>
+                <!-- /.col-lg-4 -->
+                <!-- .col-lg-2 -->
+                <div class="col-lg-2">
+                    {!! Form::button('Search', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
+                </div>
+                <!-- /.col-lg-2 -->
+            </div>
+            <!-- /.row -->
+            {!! Form::close() !!}
 
             <hr/>
             {{-- Users Table --}}

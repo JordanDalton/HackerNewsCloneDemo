@@ -76,4 +76,17 @@ class VoteRepository implements VoteRepositoryInterface {
         //
         return $this->getModel()->withTrashed()->with('user', 'voteable')->latest()->criteria( $search_parameters )->paginate( $per_page, $columns );
     }
+
+    /**
+     * Count the number of votes between 2 dates.
+     *
+     * @param $start_datetime
+     * @param $end_datetime
+     *
+     * @return int
+     */
+    public function getCountBetweenDates( $start_datetime, $end_datetime )
+    {
+        return $this->getModel()->whereBetween('created_at', [$start_datetime, $end_datetime])->byUnbannedUser()->count();
+    }
 }

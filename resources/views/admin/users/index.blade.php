@@ -38,7 +38,7 @@
 
                 <!-- .col-lg-4 -->
                 <div class="col-lg-4">
-                    {!! Form::text('user[name]', Input::get('user.name', ''), ['class' => 'form-control', 'placeholder' => 'johnSmith']) !!}
+                    {!! Form::text('user[username]', Input::get('user.username', ''), ['class' => 'form-control', 'placeholder' => 'johnSmith']) !!}
                 </div>
                 <!-- /.col-lg-4 -->
                 <!-- .col-lg-4 -->
@@ -83,9 +83,9 @@
                         <td>{{ $user->getDurationSinceCreated() }}</td>
                         <td>
                             <div class="btn-group" role="group" aria-label="">
-                                <a class="btn btn-xs btn-default" href="{{ route('admin.posts.index',    ['user_id' => $user->getId()]) }}">Posts</a>
-                                <a class="btn btn-xs btn-default" href="{{ route('admin.comments.index', ['user_id' => $user->getId()]) }}">Comments</a>
-                                <a class="btn btn-xs btn-default" href="{{ route('admin.votes.index',    ['user_id' => $user->getId()]) }}">Votes</a>
+                                <a class="btn btn-xs btn-default" href="{{ route('admin.posts.index',    ['post[user_id]' => $user->getId()]) }}">Posts</a>
+                                <a class="btn btn-xs btn-default" href="{{ route('admin.comments.index', ['comment[user_id]' => $user->getId()]) }}">Comments</a>
+                                <a class="btn btn-xs btn-default" href="{{ route('admin.votes.index',    ['votes[user_id]' => $user->getId()]) }}">Votes</a>
                             </div>
                         </td>
                     </tr>

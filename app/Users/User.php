@@ -50,6 +50,22 @@ class User extends PresentableSoftDeleteModel implements AuthenticatableContract
     protected $searchable_fields = ['about', 'email', 'username'];
 
     /**
+     * Decrement the users karma score.
+     *
+     * @return bool
+     */
+    public function decrementKarma()
+    {
+        // Increment the karma score.
+        //
+        $this->karma = $this->karma -1;
+
+        // Now save the changes.
+        //
+        return $this->save();
+    }
+
+    /**
      * Generate a unique email authentication code.
      *
      * @return string

@@ -5,6 +5,7 @@ use App\Core\PresentableSoftDeleteModel;
 use App\Users\User;
 use App\Votes\Vote;
 use Auth;
+use Carbon\Carbon;
 use DB;
 
 class Post extends PresentableSoftDeleteModel {
@@ -82,6 +83,21 @@ class Post extends PresentableSoftDeleteModel {
     }
 
     /**
+     * Query scope that will filter out records where the user is banned.
+     *
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeByUnbannedUser( $query )
+    {
+        return $query->whereHas( 'user' , function ( $query )
+        {
+            return $query->unbanned();
+        } );
+    }
+
+    /**
      * Query scope that will fetch records that fall within
      * a provided search criteria.
      *
@@ -99,10 +115,6 @@ class Post extends PresentableSoftDeleteModel {
             // Drop any array that have blank values.
             //
             $search_parameters = dropBlankArrayValues($search_parameters);
-
-            // Define a list of allowable search fields.
-            //
-            $search_parameters = $this->searchableFields( $search_parameters );
 
             // Iterate through the list of $search_parameters and generate
             // a like statement for each.
@@ -138,21 +150,6 @@ class Post extends PresentableSoftDeleteModel {
     }
 
     /**
-     * Query scope that will filter out records where the user is banned.
-     *
-     * @param $query
-     *
-     * @return mixed
-     */
-    public function scopeByUnbannedUser( $query )
-    {
-        return $query->whereHas( 'user' , function ( $query )
-        {
-            return $query->unbanned();
-        } );
-    }
-
-    /**
      * Query scope that will fetch records where the show column is equal to 1 (true).
      *
      * @param $query
@@ -162,6 +159,18 @@ class Post extends PresentableSoftDeleteModel {
     public function scopeShow( $query )
     {
         return $query->whereShow( true );
+    }
+
+    /**
+     * Define query scope that will only fetch today's records.
+     *
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeToday( $query )
+    {
+        return $query->where('created_at', '>', Carbon::today());
     }
 
     /**

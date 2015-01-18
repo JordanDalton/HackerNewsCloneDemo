@@ -13,6 +13,5 @@ class FrontendLayoutComposer {
     public function compose( View $view )
     {
         $view->with('layout', 'layouts.default');
-        $view->with('site_name', config('settings.site_name'));
     }
 } 

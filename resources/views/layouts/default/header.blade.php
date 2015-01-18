@@ -17,6 +17,10 @@
                 <li class="{{ isActiveRouteName('posts.show_off') }}"><a href="{{ route('posts.show_off') }}">show</a></li>
                 <li class="{{ isActiveRouteName('posts.ask') }}"><a href="{{ route('posts.ask') }}">ask</a></li>
                 <li class="{{ isActiveRouteName('posts.create') }}"><a href="{{ route('posts.create') }}">submit</a></li>
+                @if( Auth::check() )
+                <li class="{{ isActiveRouteName('posts.submitted') }}"><a href="{{ route('posts.submitted') }}">your submissions</a></li>
+                <li class="{{ isActiveRouteName('comments.threads') }}"><a href="{{ route('comments.threads') }}">your threads</a></li>
+                @endif
             </ul>
             @if( ! Auth::check() )
             <ul class="nav navbar-nav pull-right">
@@ -28,6 +32,10 @@
                 <li class="dropdown">
                     <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-user"></i> {{ Auth::user()->username }} <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">
+                        @if( $_is_admin_or_moderator )
+                            <li><a href="{{ route('admin.dashboard.index') }}"><i class="fa fa-dashboard"></i> Go to Admin Dashboard</a></li>
+                            <li class="divider"></li>
+                        @endif
                         <li><a href="{{ Auth::user()->present()->getEditProfileLink() }}"><i class="fa fa-cogs"></i> Settings</a></li>
                         <li class="divider"></li>
                         <li><a href="{{ Auth::user()->present()->getProfileLink() }} "><i class="fa fa-user"></i> My Profile</a></li>

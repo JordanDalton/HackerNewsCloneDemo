@@ -1,4 +1,4 @@
-@extends($layout)
+@extends('layouts.default')
 
 {{-- Set the page title --}}
 @section('page_title')

@@ -163,6 +163,15 @@ Route::group( [ 'namespace' => 'Posts' ] , function ()
         'roles'      => [ 'Administrators' , 'Moderators' , 'Users' ]
     ] );
 
+    // Show post that have been submitted by the user.
+    //
+    Route::get('submitted', [
+        'as'         => 'posts.submitted',
+        'middleware' => [ 'auth' , 'roleGatekeeper' ] ,
+        'uses'       => 'PostsController@submitted' ,
+        'roles'      => [ 'Administrators' , 'Moderators' , 'Users' ]
+    ]);
+
     // Cast vote towards post.
     //
     Route::post( '{id}/vote' , [
@@ -194,6 +203,15 @@ Route::group( [ 'namespace' => 'Comments' ] , function ()
         'as'   => 'comments.vote' ,
         'uses' => 'CommentsController@vote'
     ] );
+
+    // Show comments that have been submitted by the user.
+    //
+    Route::get('threads', [
+        'as'         => 'comments.threads',
+        'middleware' => [ 'auth' , 'roleGatekeeper' ] ,
+        'uses'       => 'CommentsController@threads' ,
+        'roles'      => [ 'Administrators' , 'Moderators' , 'Users' ]
+    ]);
 } );
 
 // User Namespace Routing Group

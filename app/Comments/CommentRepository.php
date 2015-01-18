@@ -63,6 +63,19 @@ class CommentRepository implements CommentRepositoryInterface {
     }
 
     /**
+     * Count the number of posts between 2 dates.
+     *
+     * @param $start_datetime
+     * @param $end_datetime
+     *
+     * @return int
+     */
+    public function getCountBetweenDates( $start_datetime, $end_datetime )
+    {
+        return $this->getModel()->whereBetween('created_at', [$start_datetime, $end_datetime])->byUnbannedUser()->count();
+    }
+
+    /**
      * Fetch the latest records and return them in paginated form.
      *
      * @param int   $per_page The number of record to show on each page.
@@ -73,6 +86,20 @@ class CommentRepository implements CommentRepositoryInterface {
     public function getPaginatedNewestWithReplies( $per_page = 15 , $columns = [ '*' ] )
     {
         return $this->getModel()->with(['post', 'replies', 'user'])->latest()->paginate( $per_page, $columns );
+    }
+
+    /**
+     * Fetch the latest records and return them in paginated form.
+     *
+     * @param int   $user_id  The user's id number.
+     * @param int   $per_page The number of record to show on each page.
+     * @param array $columns  The columns that we want returned.
+     *
+     * @return Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedNewestWithRepliesByUserId( $user_id, $per_page = 15 , $columns = [ '*' ] )
+    {
+        return $this->getModel()->with(['post', 'replies', 'user'])->latest()->whereUserId( $user_id )->paginate( $per_page, $columns );
     }
 
     /**

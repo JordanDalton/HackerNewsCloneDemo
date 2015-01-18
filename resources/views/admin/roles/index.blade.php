@@ -31,9 +31,33 @@
     <div class="row">
 
         <!-- .col-lg-12 -->
-        <div class="col-lg-6">
+        <div class="col-lg-12">
 
-            @include('layouts.partials.searchform')
+            <h3>Search <small>Users</small></h3>
+            {!! Form::open(['method' => 'GET']) !!}
+            <!-- .row -->
+            <div class="row">
+                {{-- Make the user aware of any search filters being applied to the results. --}}
+                @include('layouts.partials.search_filters_applied', ['searchGroup' => 'user'])
+
+                <!-- .col-lg-4 -->
+                <div class="col-lg-4">
+                    {!! Form::text('user[name]', Input::get('user.name', ''), ['class' => 'form-control', 'placeholder' => 'johnSmith']) !!}
+                </div>
+                <!-- /.col-lg-4 -->
+                <!-- .col-lg-4 -->
+                <div class="col-lg-4">
+                    {!! Form::text('user[email]', Input::get('user.email', ''), ['class' => 'form-control', 'placeholder' => 'john.smith@johnsmith.com']) !!}
+                </div>
+                <!-- /.col-lg-4 -->
+                <!-- .col-lg-2 -->
+                <div class="col-lg-2">
+                    {!! Form::button('Search', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
+                </div>
+                <!-- /.col-lg-2 -->
+            </div>
+            <!-- /.row -->
+            {!! Form::close() !!}
 
             <hr/>
 

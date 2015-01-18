@@ -77,13 +77,13 @@ class UserRepository implements UserRepositoryInterface {
      * Search within a role for users based on a supplied search criteria.
      *
      * @param Role   $role     The role model.
-     * @param string $criteria The search criteria.
+     * @param array  $criteria The search criteria.
      * @param int    $per_page The number of records to show on each page.
      * @param array  $columns  The columns we want returned.
      *
      * @return mixed
      */
-    public function findWithinRoleByCriteria( Role $role, $criteria = '' , $per_page = 15, $columns = [ '*' ] )
+    public function findWithinRoleByCriteria( Role $role, $criteria = [] , $per_page = 15, $columns = [ '*' ] )
     {
         return $role->users()->criteria( $criteria )->paginate( $per_page, $columns );
     }

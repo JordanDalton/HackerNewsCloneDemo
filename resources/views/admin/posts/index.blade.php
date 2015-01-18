@@ -128,7 +128,7 @@
                         <td>{{ $post->getTitle() }}</td>
                         <td>
                             @if( $post->getUrl() )
-                                <a class="btn btn-xs btn-info" href="{{ $post->getUrl() }}">
+                                <a class="btn btn-xs btn-info" href="{{ $post->getUrl() }}" target="_blank">
                                     <i class="fa fa-external-link"></i>
                                     {{ $post->getUrlDomain() }}
                                 </a>

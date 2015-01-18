@@ -62,6 +62,21 @@ class Vote extends PresentableSoftDeleteModel {
     }
 
     /**
+     * Query scope that will filter out records where the user is banned.
+     *
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeByUnbannedUser( $query )
+    {
+        return $query->whereHas( 'user' , function ( $query )
+        {
+            return $query->unbanned();
+        } );
+    }
+
+    /**
      * Return a list of user fields that are allowed to be searched upon.
      *
      * @param array $requested_fields

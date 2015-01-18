@@ -149,6 +149,22 @@ class PostsController extends Controller {
     }
 
     /**
+     * Show all of the posts submitted by the in session user.
+     *
+     * @return Response
+     */
+    public function submitted()
+    {
+        // Fetch the post from the database.
+        //
+        $posts = $this->postRepository->getPaginatedWithUserAndCommentsByUserId( Auth::id() );
+
+        // Show the page.
+        //
+        return routeView()->withPosts($posts);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int $id
