@@ -42,6 +42,54 @@ function hasError( $name , Illuminate\Support\ViewErrorBag $errors )
 }
 
 /**
+ * Check if the user is an administrator.
+ *
+ * @return boolean
+ */
+function isAdmin()
+{
+    return Session::get('is_admin', function()
+    {
+        // Confirm if the user is an administrator.
+        //
+        $is_admin = Auth::check() && Auth::user()->hasRole('Administrators');
+
+        // Push the status to the session.
+        //
+        Session::put('is_admin', $is_admin);
+    });
+}
+
+/**
+ * Return if the user is a admin or moderator.
+ *
+ * @return bool
+ */
+function isAdminOrModerator()
+{
+    return isAdmin() or isModerator();
+}
+
+/**
+ * Check if the user is a moderator.
+ *
+ * @return boolean
+ */
+function isModerator()
+{
+    return Session::get('is_moderator', function()
+    {
+        // Confirm if the user is an administrator.
+        //
+        $is_moderator = Auth::check() && Auth::user()->hasRole('Moderators');
+
+        // Push the status to the session.
+        //
+        Session::put('is_moderator', $is_moderator);
+    });
+}
+
+/**
  * Determine of if a specified route is currently be viewed.
  *
  * @param string $routeName The dot notational route name.

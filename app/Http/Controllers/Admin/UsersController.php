@@ -100,6 +100,14 @@ class UsersController extends Controller {
         //
         $user = $this->userRepository->findByIdWithRoles( $id );
 
+        // Don't allow users that are not administrators to be able
+        // to edit admin user records.
+        //
+        if( $user->id == 1 & ! isAdmin() && isModerator() )
+        {
+            App:abort(403, 'Permission Denied');
+        }
+
         // Capture the roles that are assigned to the user.
         //
         $assigned_role_ids = $user->roles->lists('id');
@@ -122,6 +130,14 @@ class UsersController extends Controller {
         // Fetch the user account from the database.
         //
         $user = $this->userRepository->findByIdWithRoles( $id );
+
+        // Don't allow users that are not administrators to be able
+        // to edit admin user records.
+        //
+        if( $user->id == 1 & ! isAdmin() && isModerator() )
+        {
+            App:abort(403, 'Permission Denied');
+        }
 
         // Update the record.
         //

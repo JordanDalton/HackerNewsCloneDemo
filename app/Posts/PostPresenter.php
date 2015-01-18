@@ -16,6 +16,16 @@ class PostPresenter extends BasePresenter {
     }
 
     /**
+     * Return the link to edit this record in the admin panel.
+     *
+     * @return string
+     */
+    public function getAdminEditLink()
+    {
+        return route('admin.posts.edit', $this->getWrappedObject()->id);
+    }
+
+    /**
      * Get the difference in a human readable format for the duration since the post was created.
      *
      * @return string

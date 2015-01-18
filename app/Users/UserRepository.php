@@ -35,6 +35,14 @@ class UserRepository implements UserRepositoryInterface {
      */
     public function attachRoles( $record, $roles = [] )
     {
+        // Prevent moderators from trying to hack the system so
+        // that they can override who is admin.
+        //
+        if( isModerator() && in_array(1, $roles) )
+        {
+            $roles = array_except($roles, [1]);
+        }
+
         return $record->roles()->sync( $roles );
     }
 
@@ -118,7 +126,7 @@ class UserRepository implements UserRepositoryInterface {
      */
     public function getPaginatedResourceListing( $per_page = 15, $columns = [ '*' ])
     {
-        return $this->getModel()->withTrashed()->latest()->paginate( $per_page , $columns );
+        return $this->getModel()->withTrashed()->latest()->dictateAdmin()->paginate( $per_page , $columns );
     }
 
     /**
@@ -132,7 +140,7 @@ class UserRepository implements UserRepositoryInterface {
      */
     public function getPaginatedResourceListingByCriteria( $criteria = [], $per_page = 15, $columns = [ '*' ])
     {
-        return $this->getModel()->withTrashed()->criteria($criteria)->latest()->paginate( $per_page , $columns );
+        return $this->getModel()->withTrashed()->criteria($criteria)->latest()->dictateAdmin()->paginate( $per_page , $columns );
     }
 
     /**

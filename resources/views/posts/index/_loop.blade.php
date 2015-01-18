@@ -11,6 +11,15 @@
                         <i class="fa fa-arrow-up"></i>
                     </a>
                 @endif
+
+                {{-- Show admin edit link if the user is a administrator or moderator --}}
+                @if( $_is_admin_or_moderator )
+                    <div>
+                        <a class="btn btn-xs btn-success" href="{!! $post->getAdminEditLink() !!}" style="margin-top:10px" target="_blank">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </div>
+                @endif
             </div>
             <div class="media-body">
                 <h4 class="media-heading">

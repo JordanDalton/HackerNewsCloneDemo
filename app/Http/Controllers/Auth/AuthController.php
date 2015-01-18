@@ -6,6 +6,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
+use Session;
 
 class AuthController extends Controller {
 
@@ -139,6 +140,11 @@ class AuthController extends Controller {
 
         if ( $this->auth->attempt( $credentials , $request->has( 'remember' ) ) )
         {
+            // Flush out any roles assignments in the session data.
+            //
+            Session::forget('is_admin');
+            Session::forget('is_moderator');
+
             return redirect()->intended( $this->redirectPath() );
         }
 

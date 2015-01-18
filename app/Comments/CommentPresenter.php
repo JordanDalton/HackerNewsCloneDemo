@@ -15,6 +15,16 @@ class CommentPresenter extends BasePresenter {
     }
 
     /**
+     * Return the link to edit this record in the admin panel.
+     *
+     * @return string
+     */
+    public function getAdminEditLink()
+    {
+        return route('admin.comments.edit', $this->getWrappedObject()->id);
+    }
+
+    /**
      * Return the comment made.
      *
      * @param  bool $raw Return the raw response.

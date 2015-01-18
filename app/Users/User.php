@@ -207,6 +207,29 @@ class User extends PresentableSoftDeleteModel implements AuthenticatableContract
     }
 
     /**
+     * Define query scope that will not allow the primary administrators
+     * user record from being returned.
+     *
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeDictateAdmin( $query )
+    {
+        $returnQuery = $query;
+
+        // Prevent the admin user record from showing up in results to
+        // users that are not assigned to the admin users group.
+        //
+        if( ! isAdmin() && isModerator() )
+        {
+            $returnQuery->whereNotIn('id', [1]);
+        }
+
+        return $returnQuery;
+    }
+
+    /**
      * Query scope will fetch accounts that are not banned.
      *
      * @param Illuminate\Database\Eloquent\Builder $query

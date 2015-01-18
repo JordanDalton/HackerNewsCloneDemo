@@ -6,7 +6,7 @@
     <!-- .page-header -->
     <div class="page-header">
         <h1><i class="fa fa-dashboard"></i> Dashboard</h1>
-        <p>Below are charting integration examples using <a class="underlined" href="http://www.highcharts.com">HighCharts</a>.</p>
+        <p>Below are charting integration examples using <a class="underlined" href="http://www.highcharts.com" target="_blank">HighCharts</a>.</p>
     </div>
     <!-- /.page-header -->
     <!-- .row -->

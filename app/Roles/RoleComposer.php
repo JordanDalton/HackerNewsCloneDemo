@@ -26,6 +26,17 @@ class RoleComposer {
      */
     public function compose( $view )
     {
-        $view->with('roles', $this->roles->getList());
+        $roles = $this->roles->getList();
+
+        // If the user is not administrator then we need
+        // to remove the admin group from the $roles.
+        //
+        if( ! isAdmin() )
+        {
+            $roles = array_except($roles, [1]);
+        }
+
+
+        $view->with('roles', $roles);
     }
 } 

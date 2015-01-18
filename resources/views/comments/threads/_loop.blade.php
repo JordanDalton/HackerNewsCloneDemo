@@ -21,6 +21,13 @@
                         </a>
                     @endif
 
+                    {{-- Show admin edit link if the user is a administrator or moderator --}}
+                    @if( $_is_admin_or_moderator )
+                        <a class="btn btn-xs btn-success" href="{!! $comment->getAdminEditLink() !!}" target="_blank">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    @endif
+
                     {{ $comment->getVoteCount() }} points by
                     <a class="underlined" href="{{ $comment->user->getProfileLink() }}">
                         {{ $comment->user->getUsername() }}

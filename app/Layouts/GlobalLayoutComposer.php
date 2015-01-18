@@ -16,7 +16,7 @@ class GlobalLayoutComposer {
     {
         $view->with('site_name', config('settings.site_name'));
         $view->with('_is_admin', $this->isAdmin());
-        $view->with('_is_admin_or_moderator', $this->isAdmin() OR $this->isModerator());
+        $view->with('_is_admin_or_moderator', $this->isAdminOrModerator() );
         $view->with('_is_moderator', $this->isModerator());
     }
 
@@ -27,16 +27,17 @@ class GlobalLayoutComposer {
      */
     public function isAdmin()
     {
-        return Session::get('is_admin', function()
-        {
-            // Confirm if the user is an administrator.
-            //
-            $is_admin = Auth::check() && Auth::user()->hasRole('Administrators');
+        return isAdmin();
+    }
 
-            // Push the status to the session.
-            //
-            Session::put('is_admin', $is_admin);
-        });
+    /**
+     * Determine if the user is an admin or moderator.
+     *
+     * @return bool
+     */
+    public function isAdminOrModerator()
+    {
+        return $this->isAdmin() OR $this->isModerator();
     }
 
     /**
@@ -46,15 +47,6 @@ class GlobalLayoutComposer {
      */
     public function isModerator()
     {
-        return Session::get('is_moderator', function()
-        {
-            // Confirm if the user is an administrator.
-            //
-            $is_moderator = Auth::check() && Auth::user()->hasRole('Moderators');
-
-            // Push the status to the session.
-            //
-            Session::put('is_moderator', $is_moderator);
-        });
+        return isModerator();
     }
 } 
