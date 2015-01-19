@@ -48,7 +48,7 @@
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
                                 {!! Form::button('Login', ['class' => 'btn btn-primary', 'style' => 'margin-right: 15px', 'type' => 'submit']) !!}
-								<a href="/password/email">Forgot Your Password?</a>
+								<a href="{{ route('auth.password') }}">Forgot Your Password?</a>
 							</div>
 						</div>
 					{!! Form::close() !!}

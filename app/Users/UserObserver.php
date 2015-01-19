@@ -22,6 +22,18 @@ class UserObserver {
     }
 
     /**
+     * Observe when a user record is being created.
+     *
+     * @param $user
+     */
+    public function creating( $user )
+    {
+        // Generate unique email authentication code.
+        //
+        $user->email_authentication_code = $user->generateUniqueEmailAuthenticationCode();
+    }
+
+    /**
      * Observe when a user record has been created.
      *
      * @param $user

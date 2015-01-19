@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginFormRequest;
 use App\Users\UserRepositoryInterface;
 use Auth;
 use Illuminate\Http\Request;
@@ -37,7 +38,7 @@ class AuthController extends Controller {
         $this->auth      = $auth;
         $this->registrar = $registrar;
 
-        $this->middleware( 'guest' , [ 'except' => 'getLogout' ] );
+        $this->middleware( 'guest' , [ 'except' => ['getEmailVerify', 'getLogout'] ] );
     }
 
 
@@ -70,14 +71,14 @@ class AuthController extends Controller {
             //
             Auth::login( $account );
 
-            // Redirect the user to the appropriate dashboard.
+            // Redirect the user to the homepage.
             //
-            return redirect( '/dashboard' );
+            return redirect( '/' );
         }
 
         // Redirect the user to the homepage.
         //
-        return redirect( '/' );
+        return view( 'errors.invalid_email_authentication_code' );
     }
 
     /**
@@ -126,11 +127,11 @@ class AuthController extends Controller {
     /**
      * Handle a login request to the application.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param LoginFormRequest $request
      *
      * @return \Illuminate\Http\Response
      */
-    public function postLogin( Request $request )
+    public function postLogin( LoginFormRequest $request )
     {
         $this->validate( $request , [
             'email' => 'required' , 'password' => 'required' ,

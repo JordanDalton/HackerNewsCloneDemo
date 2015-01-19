@@ -59,7 +59,12 @@ class PasswordController extends Controller {
     {
         $this->validate($request, ['email' => 'required']);
 
-        switch ($response = $this->passwords->sendResetLink($request->only('email')))
+        $callback = function($m)
+        {
+            $m->subject('Reset ' .  config('settings.site_name') . ' Password');
+        };
+
+        switch ($response = $this->passwords->sendResetLink($request->only('email'), $callback))
         {
             case PasswordBroker::RESET_LINK_SENT:
                 return redirect()->back()->with('status', trans($response));
@@ -96,9 +101,9 @@ class PasswordController extends Controller {
     public function postReset(Request $request)
     {
         $this->validate($request, [
-            'token' => 'required',
-            'email' => 'required',
-            'password' => 'required|confirmed',
+            'token'     => 'required',
+            'email'     => 'required',
+            'password'  => 'required|confirmed',
         ]);
 
         $credentials = $request->only(

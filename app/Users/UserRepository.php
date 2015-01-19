@@ -3,6 +3,7 @@
 use App\Core\RepositoryTrait;
 use App\Core\SoftDeleteRepositoryTrait;
 use App\Roles\Role;
+use DateTime;
 
 class UserRepository implements UserRepositoryInterface {
 
@@ -44,6 +45,26 @@ class UserRepository implements UserRepositoryInterface {
         }
 
         return $record->roles()->sync( $roles );
+    }
+
+    /**
+     * Find a user record by it's email address and check if the account has
+     * been email verified.
+     *
+     * @param $email
+     *
+     * @return bool
+     */
+    public function byEmailAddressCheckIfAccountIsEmailAuthenticated( $email )
+    {
+        // Check if an account with that email exists.
+        //
+        $account = $this->simplyFindByEmailForValidationPurposes( $email );
+
+        // If the account exists we will return the email_authenticated status. Otherwise
+        // we wll return a false value by default.
+        //
+        return $account ? $account->email_authenticated : false;
     }
 
     /**
@@ -166,9 +187,21 @@ class UserRepository implements UserRepositoryInterface {
     public function markAccountAsEmailAuthenticated( $account )
     {
         return $account->fill([
-            'activated_at' => new DateTime,
-            'active' => 1
+            'email_authenticated' => 1,
+            'email_authenticated_at' => new DateTime
         ])->save();
+    }
+
+    /**
+     * Find a user record simply by it's email. No other data will be eager-loaded.
+     *
+     * @param string $email
+     *
+     * @return mixed
+     */
+    public function simplyFindByEmailForValidationPurposes( $email )
+    {
+        return $this->getModel()->withTrashed()->whereEmail( $email )->first();
     }
 
     /**

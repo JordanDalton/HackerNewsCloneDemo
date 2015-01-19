@@ -104,6 +104,35 @@ Route::group( [ 'namespace' => 'Auth' ] , function ()
         'as'   => 'auth.register' ,
         'uses' => 'AuthController@postRegister' ,
     ] );
+
+    // Reset Password Page
+    //
+    Route::get('reset-password', [
+        'as'    => 'auth.password',
+        'uses'  => 'PasswordController@getEmail'
+    ]);
+
+    // Process Password Reset Form
+    //
+    Route::post('reset-password', [
+        'as'    => 'auth.password',
+        'uses'  => 'PasswordController@postEmail'
+    ]);
+
+    // Confirm Password Reset Request
+    //
+    Route::get('reset/{token}', [
+        'as'    => 'auth.reset',
+        'uses'  => 'PasswordController@getReset'
+    ]);
+
+    // Process Password Reset Request
+    //
+    Route::post('reset/{token}', [
+        'as'    => 'auth.reset',
+        'uses'  => 'PasswordController@postReset'
+    ]);
+
 } );
 
 // Posts Namespace Routing Group
@@ -222,6 +251,7 @@ Route::group( [ 'namespace' => 'Users' ] , function ()
     //
     Route::resource( 'users' , 'UsersController' );
 } );
+
 
 /*
 Route::get('/', 'WelcomeController@index');
