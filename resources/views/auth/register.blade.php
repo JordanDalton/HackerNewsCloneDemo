@@ -1,5 +1,10 @@
 @extends($layout)
 
+{{-- Set the title of the page. --}}
+@section('page_title')
+    Join @parent
+@stop
+
 @section('content')
 <div class="container">
 	<div class="row">

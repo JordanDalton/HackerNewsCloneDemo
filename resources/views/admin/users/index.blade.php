@@ -19,7 +19,7 @@
     <!-- .page-header -->
     <div class="page-header">
         <h1><i class="fa fa-users"></i> User <small>Management</small></h1>
-        <p>Create, edit, update, and delete user records.</p>
+        <p>Edit, update, and delete user records.</p>
     </div>
     <!-- /.page-header -->
 

@@ -11,6 +11,13 @@
 |
 */
 
+// Features Page.
+//
+Route::get('features', [
+    'as'   => 'features',
+    'uses' => 'HomeController@features',
+]);
+
 // Admin Namespace Routing Group
 //
 Route::group( [
@@ -251,15 +258,3 @@ Route::group( [ 'namespace' => 'Users' ] , function ()
     //
     Route::resource( 'users' , 'UsersController' );
 } );
-
-
-/*
-Route::get('/', 'WelcomeController@index');
-
-Route::get('home', 'HomeController@index');
-
-Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
-]);
-*/

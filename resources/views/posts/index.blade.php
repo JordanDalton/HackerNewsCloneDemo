@@ -11,9 +11,9 @@
 
     <div class="jumbotron">
         <h1>Hacker News Clone</h1>
-        <p><strong>{{ $site_name }}</strong> is a simple yet powerful script that allows you create your own socially driven content website. This script is built on <a href="http://www.laravel.com">Laravel 5</a>, one of the most modern development frameworks in the history of PHP. With this script you can be online and running in a matter of minutes. <br/></p>
-        <p>Feel free to try out this demo site which is reset ever 15 minutes.</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Buy on CodeCanyon.com</a> <a class="btn btn-success btn-lg" href="#" role="button">View Features</a></p>
+        <p><strong>{{ $site_name }}</strong> is a powerful script that allows you create your own socially driven content website. This script is built on <a href="http://www.laravel.com">Laravel 5</a>, one of the most modern development frameworks in the history of PHP. With this script you can be online and running in a matter of minutes. <br/></p>
+        <p>Feel free to try out this demo site which is reset every 15 minutes.</p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Buy Now</a> <a class="btn btn-success btn-lg" href="{!! route('features') !!}" role="button">View Features</a></p>
     </div>
 
     @foreach( $posts as $post )
