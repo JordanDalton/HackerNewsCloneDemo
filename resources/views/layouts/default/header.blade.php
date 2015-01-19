@@ -28,7 +28,7 @@
                 <li class="{{ isActiveRouteName('auth.register') }}"><a href="{{ route('auth.register') }}"><i class="fa fa-arrow-right"></i> Join</a></li>
             </ul>
             @else
-            <ul class="nav navbar-nav pull-right">
+            <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-user"></i> {{ Auth::user()->username }} <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">

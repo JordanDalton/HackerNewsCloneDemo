@@ -19,7 +19,7 @@
                 <li class="{{ isActiveRouteName('admin.comments.index') }}"><a href="{{ route('admin.comments.index') }}">comments</a></li>
                 <li class="{{ isActiveRouteName('admin.votes.index') }}"><a href="{{ route('admin.votes.index') }}">votes</a></li>
             </ul>
-            <ul class="nav navbar-nav pull-right">
+            <ul class="nav navbar-nav navbar-right">
                 <li><a href="{{ route('posts.index') }}"><i class="fa fa-arrow-right"></i> Go to Frontend</a></li>
                 <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out"></i> Logout</a></li>
             </ul>
