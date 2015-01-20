@@ -102,6 +102,8 @@ class UsersTableSeeder extends Seeder {
         {
             $email_authenticated = $this->faker->boolean;
 
+            if( $index == 1 ) $email_authenticated = true;
+
             $this->users[ ] = [
                 'active'                    => $email_authenticated ? true : false,
                 'created_at'                => new DateTime ,
