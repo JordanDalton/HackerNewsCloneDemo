@@ -37,11 +37,11 @@ class PostObserver {
     }
 
     /**
-     * Observe when a post record is in the process of being saved.
+     * Observe when a post record is in the process of being created.
      *
      * @param $post
      */
-    public function saving( $post )
+    public function creating( $post )
     {
         // Automatically assign the logged in users id number.
         //
@@ -77,7 +77,7 @@ class PostObserver {
      *
      * @param Post $post
      */
-    public function saved( $post )
+    public function created( $post )
     {
         // Since the user has made a post we will reward them with some more karma.
         //

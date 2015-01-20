@@ -5,11 +5,11 @@ use Auth;
 class VoteObserver {
 
     /**
-     * Observe when a vote record is in the process of being saved.
+     * Observe when a vote record is in the process of being created.
      *
      * @param $vote
      */
-    public function saving( $vote )
+    public function creating( $vote )
     {
         // Automatically assign the logged in users id number.
         //
@@ -17,19 +17,14 @@ class VoteObserver {
     }
 
     /**
-     * Observe for when after a vote record has been saved.
+     * Observe for when after a vote record has been created.
      *
      * @param $vote
      */
-    public function saved( $vote )
+    public function created( $vote )
     {
-        // Since a vote has been submitted we will need to access the
-        // record which the vote was casted to.
-
         // Access the voteable record and update it's votes count.
         //
-        $voteable = $vote->voteable;
-        $voteable->votes = $vote->count();
-        $voteable->save();
+        $vote->voteable->update(['votes' => $vote->count()]);
     }
 } 
