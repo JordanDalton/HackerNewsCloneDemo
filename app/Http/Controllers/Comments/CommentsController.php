@@ -118,7 +118,7 @@ class CommentsController extends Controller {
         // Determine which username we're to use.
         //
         $username = Auth::check()
-            ? ( $usernameQuery ? $usernameQuery : Auth::user()->uesrname )
+            ? ( $usernameQuery ? $usernameQuery : Auth::user()->username )
             : ( $usernameQuery ? $usernameQuery : false );
 
         // If no username then we will forward them to the homepage.

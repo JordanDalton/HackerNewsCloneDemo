@@ -100,9 +100,14 @@ class UserRoleTableSeeder extends Seeder {
         //
         foreach ( range( 1 , $userIdCountLessAdmin ) as $index )
         {
+            $role_id = $this->faker->numberBetween($min = 2, $max = count($roleIds));
+            $user_id = $this->faker->unique()->numberBetween($min = 2, $max = count($userIds));
+
+            if( $user_id == 2 ) $role_id = 3;
+
             $this->user_role[ ] = [
-                'role_id' => $this->faker->numberBetween($min = 2, $max = count($roleIds)),
-                'user_id' => $this->faker->unique()->numberBetween($min = 2, $max = count($userIds))
+                'role_id' => $role_id,
+                'user_id' => $user_id
             ];
         }
     }

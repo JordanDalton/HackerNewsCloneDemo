@@ -16,6 +16,12 @@
         <p><a class="btn btn-primary btn-lg" href="#" role="button">Buy Now</a> <a class="btn btn-success btn-lg" href="{!! route('features') !!}" role="button">View Features</a></p>
     </div>
 
+    @if( ! count($posts) )
+    <div class="alert alert-warning">
+        There are currently no posts to list.
+    </div>
+    @endif
+
     @foreach( $posts as $post )
         @include(Route::currentRouteName().'._loop')
     @endforeach
