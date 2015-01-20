@@ -36,11 +36,11 @@ class CommentObserver {
     }
 
     /**
-     * Observe when a comment record is in the process of being saved.
+     * Observe when a comment record is in the process of being created.
      *
      * @param $comment
      */
-    public function saving( $comment )
+    public function creating( $comment )
     {
         // Automatically assign the logged in users id number.
         //
@@ -48,11 +48,11 @@ class CommentObserver {
     }
 
     /**
-     * Observe when a comment record has been saved.
+     * Observe when a comment record has been created.
      *
      * @param $comment
      */
-    public function saved( $comment )
+    public function created( $comment )
     {
         // Since the user has posted a comment we will reward them
         // with some karma.
