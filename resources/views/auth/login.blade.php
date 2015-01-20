@@ -9,6 +9,17 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-8">
+
+            <div class="well">
+                <h4>Admin Test Credentials</h4>
+                <p>Username: administrator@example.com</p>
+                <p>Password: password</p>
+
+                <h4>User Test Credentials</h4>
+                <p>Username: user1@me.com</p>
+                <p>Password: password</p>
+            </div>
+
 			<div class="panel panel-default">
 				<div class="panel-heading">Login</div>
 				<div class="panel-body">
@@ -25,6 +36,7 @@
 					@endif
 
                     {!! Form::open(['class' => 'form-horizontal', 'role' => 'form', 'route' => 'auth.login']) !!}
+
                         <!-- Email Form Input -->
                         <div class="form-group {{ hasError('email', $errors) }}">
                             {!! Form::label('email', 'Email:', ['class' => 'col-md-4 control-label']) !!}
