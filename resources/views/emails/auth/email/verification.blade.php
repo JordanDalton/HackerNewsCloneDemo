@@ -5,11 +5,17 @@
 </head>
 <body>
     <h2>Thank you for joining {{ $site_name }}!</h2>
-    <div>
+    <p>
         In order to activate your account please visit the following link:
-    </div>
-    <div>
+    </p>
+    <p>
         <a href="{!! route('auth.email.verify', $email_authentication_code) !!}">{!! route('auth.email.verify', $email_authentication_code) !!}</a>
-    </div>
+    </p>
+
+    <p>
+        Regards,<br/>
+        {{ $site_name }}
+    </p>
+
 </body>
 </html>

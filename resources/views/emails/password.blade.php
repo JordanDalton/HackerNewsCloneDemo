@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 </head>
 <body>
-<h2>Reset your CE Zoom Password</h2>
+<h2>Reset your {{ $site_name }} Password</h2>
 
 <p>Per your request here is the link to reset your password:</p>
 

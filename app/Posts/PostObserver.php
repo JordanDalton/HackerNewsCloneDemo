@@ -1,9 +1,27 @@
 <?php namespace App\Posts;
 
+use App\Dispatchers\EmailDispatcher;
 use Auth;
 use Illuminate\Support\Str;
 
 class PostObserver {
+
+    /**
+     * The email dispatcher.
+     *
+     * @var \App\Dispatchers\EmailDispatcher
+     */
+    protected $dispatcher;
+
+    /**
+     * Create new PostObserver instance.
+     *
+     * @param EmailDispatcher $dispatcher
+     */
+    public function __construct( EmailDispatcher $dispatcher )
+    {
+        $this->dispatcher = $dispatcher;
+    }
 
     /*
      * Observe when a post record has been deleted.
@@ -64,6 +82,10 @@ class PostObserver {
         // Since the user has made a post we will reward them with some more karma.
         //
         $post->user->incrementKarma();
+
+        // Notify administrators of the new post.
+        //
+        $this->dispatcher->dispatchNewPostNotificationToAdministrators( $post );
     }
 
     /**

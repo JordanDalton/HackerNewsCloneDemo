@@ -50,6 +50,33 @@ class User extends PresentableSoftDeleteModel implements AuthenticatableContract
     protected $searchable_fields = ['about', 'email', 'username'];
 
     /**
+     * Assign a role to the user.
+     *
+     * @param string $role_name
+     * @return void
+     */
+    public function assignRole( $role_name )
+    {
+        // Fetch the role record from the database.
+        //
+        $role = Role::whereName( $role_name )->first();
+
+        // Assign the role to the user.
+        //
+        $this->roles()->attach( $role );
+    }
+
+    /**
+     * Assign Member role to the user.
+     *
+     * @return void
+     */
+    public function assignUserRole()
+    {
+        return $this->assignRole('Users');
+    }
+
+    /**
      * Decrement the users karma score.
      *
      * @return bool

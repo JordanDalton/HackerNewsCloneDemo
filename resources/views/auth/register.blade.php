@@ -13,6 +13,15 @@
 				<div class="panel-heading">Register</div>
 				<div class="panel-body">
 
+                    {{-- Alert if an user successfully registered. --}}
+                    @if( Session::get('user_registered_successfully'))
+                        <div role="alert" class="alert alert-success alert-dismissible fade in">
+                            <button aria-label="Close" data-dismiss="alert" class="close" type="button"><span aria-hidden="true">×</span></button>
+                            <h4>Thank you for joining!</h4>
+                            <p>A verification email is en route to your inbox.</p>
+                        </div>
+                    @endif
+
 					@if (count($errors) > 0)
 						<div class="alert alert-danger">
 							<strong>Whoops!</strong> There were some problems with your input.<br><br>

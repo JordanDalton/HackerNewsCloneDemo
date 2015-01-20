@@ -118,6 +118,21 @@ class UserRepository implements UserRepositoryInterface {
     }
 
     /**
+     * Get all administrator user record
+     *
+     * @return mixed
+     */
+    public function getAdministrators()
+    {
+        $roles = function( $query )
+        {
+            $query->where('name', '=', 'Administrators');
+        };
+
+        return $this->getModel()->whereHas('roles', $roles)->get();
+    }
+
+    /**
      * Return a list of all user ids.
      *
      * @return array

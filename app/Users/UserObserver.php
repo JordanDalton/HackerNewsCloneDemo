@@ -42,7 +42,7 @@ class UserObserver {
     {
         // At minimum we will assign the user to the users group.
         //
-        // $user->assignUserRole();
+        $user->assignUserRole();
 
         // Dispatch email verification code.
         //

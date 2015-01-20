@@ -19,8 +19,8 @@ class ObserverServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-        Comment::observe( new CommentObserver );
-        Post::observe( new PostObserver );
+        Comment::observe( $this->app->make(CommentObserver::class));
+        Post::observe( $this->app->make(PostObserver::class) );
         User::observe($this->app->make(UserObserver::class));
         Vote::observe( new VoteObserver );
 	}

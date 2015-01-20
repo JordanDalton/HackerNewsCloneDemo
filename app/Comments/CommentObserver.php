@@ -1,8 +1,26 @@
 <?php namespace App\Comments;
 
+use App\Dispatchers\EmailDispatcher;
 use Auth;
 
 class CommentObserver {
+
+    /**
+     * The email dispatcher.
+     *
+     * @var \App\Dispatchers\EmailDispatcher
+     */
+    protected $dispatcher;
+
+    /**
+     * Create new CommentObserver instance.
+     *
+     * @param EmailDispatcher $dispatcher
+     */
+    public function __construct( EmailDispatcher $dispatcher )
+    {
+        $this->dispatcher = $dispatcher;
+    }
 
     /*
      * Observe when a comment record has been deleted.
@@ -40,5 +58,9 @@ class CommentObserver {
         // with some karma.
         //
         $comment->user->incrementKarma();
+
+        // Notify administrators of the new comment.
+        //
+        $this->dispatcher->dispatchNewCommentNotificationToAdministrators( $comment );
     }
 } 

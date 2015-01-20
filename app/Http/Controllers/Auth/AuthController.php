@@ -38,7 +38,7 @@ class AuthController extends Controller {
         $this->auth      = $auth;
         $this->registrar = $registrar;
 
-        $this->middleware( 'guest' , [ 'except' => ['getEmailVerify', 'getLogout'] ] );
+        $this->middleware( 'guest' , [ 'except' => [ 'getEmailVerify' , 'getLogout' ] ] );
     }
 
 
@@ -94,11 +94,12 @@ class AuthController extends Controller {
     /**
      * Handle a registration request for the application.
      *
-     * @param \Illuminate\Foundation\Http\FormRequest|\Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request           $request
+     * @param \App\Users\UserRepositoryInterface $userRepository
      *
      * @return \Illuminate\Http\Response
      */
-    public function postRegister( Request $request )
+    public function postRegister( Request $request , UserRepositoryInterface $userRepository )
     {
         $validator = $this->registrar->validator( $request->all() );
 
@@ -109,9 +110,14 @@ class AuthController extends Controller {
             );
         }
 
-        $this->auth->login( $this->registrar->create( $request->all() ) );
+        // Create a new user account.
+        //
+        $userRepository->createRecord( $request->all() );
 
-        return redirect( $this->redirectPath() );
+        // Redirect the user back to the registration page and flash a message
+        // to them that states they successfully registsered.
+        //
+        return redirect()->back()->withUserRegisteredSuccessfully( true );
     }
 
     /**
@@ -143,8 +149,8 @@ class AuthController extends Controller {
         {
             // Flush out any roles assignments in the session data.
             //
-            Session::forget('is_admin');
-            Session::forget('is_moderator');
+            Session::forget( 'is_admin' );
+            Session::forget( 'is_moderator' );
 
             return redirect()->intended( $this->redirectPath() );
         }
