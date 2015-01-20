@@ -7,6 +7,7 @@ use App\Http\Requests\CommentFormRequest;
 use App\Http\Requests\VoteFormRequest;
 use App\Votes\VoteRepositoryInterface;
 use Auth;
+use Input;
 
 class CommentsController extends Controller {
 
@@ -110,13 +111,27 @@ class CommentsController extends Controller {
      */
     public function threads()
     {
+        // Check if a username is being passed at the query string.
+        //
+        $usernameQuery = Input::get('username', false);
+
+        // Determine which username we're to use.
+        //
+        $username = Auth::check()
+            ? ( $usernameQuery ? $usernameQuery : Auth::user()->uesrname )
+            : ( $usernameQuery ? $usernameQuery : false );
+
+        // If no username then we will forward them to the homepage.
+        //
+        if( ! $username ) return redirect('/');
+
         // Fetch the newest comments records form the database.
         //
-        $comments = $this->commentRepository->getPaginatedNewestWithRepliesByUserId( Auth::id() );
+        $comments = $this->commentRepository->getPaginatedNewestWithRepliesByUsername( $username );
 
         // Show the page.
         //
-        return routeView()->withComments( $comments );
+        return routeView()->withComments( $comments )->withUsername( $username );
     }
 
     /**

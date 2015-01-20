@@ -243,6 +243,25 @@ class PostRepository implements PostRepositoryInterface {
     }
 
     /**
+     * Fetch all records and return them in paginated form. Related user and comments will be in the results as well.
+     *
+     * @param int   $username The user's username.
+     * @param int   $per_page The number of record to show on each page.
+     * @param array $columns  The columns that we want returned.
+     *
+     * @return Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedWithUserAndCommentsByUsername( $username, $per_page = 15 , $columns = [ '*' ] )
+    {
+        $userWhereHas = function( $query ) use( $username )
+        {
+            return $query->whereUsername( $username );
+        };
+
+        return $this->getModel()->with( ['comments', 'user'] )->ranked()->byUnbannedUser()->whereHas('user', $userWhereHas)->paginate( $per_page , $columns );
+    }
+
+    /**
      * Get today's ask posts count.
      *
      * @return mixed

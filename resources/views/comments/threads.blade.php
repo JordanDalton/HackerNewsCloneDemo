@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('page_title')
-    Your Comments | @parent
+    {{ $username }} Comments | @parent
 @stop
 
 @section('content')
@@ -9,7 +9,7 @@
 <div class="container">
     <!-- .page-header -->
     <div class="page-header">
-        <h1>Comments <small>Posted By You</small></h1>
+        <h1>Comments <small>Posted By {{ $username }}</small></h1>
     </div>
     <!-- /.page-header -->
     @include(Route::currentRouteName().'._loop')

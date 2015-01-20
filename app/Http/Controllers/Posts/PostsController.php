@@ -8,6 +8,7 @@ use App\Posts\PostRepositoryInterface;
 use App\Votes\VoteRepositoryInterface;
 use Auth;
 use Illuminate\Routing\Controller;
+use Input;
 
 class PostsController extends Controller {
 
@@ -155,13 +156,27 @@ class PostsController extends Controller {
      */
     public function submitted()
     {
+        // Check if a username is being passed at the query string.
+        //
+        $usernameQuery = Input::get('username', false);
+
+        // Determine which username we're to use.
+        //
+        $username = Auth::check()
+                  ? ( $usernameQuery ? $usernameQuery : Auth::user()->uesrname )
+                  : ( $usernameQuery ? $usernameQuery : false );
+
+        // If no username then we will forward them to the homepage.
+        //
+        if( ! $username ) return redirect('/');
+
         // Fetch the post from the database.
         //
-        $posts = $this->postRepository->getPaginatedWithUserAndCommentsByUserId( Auth::id() );
+        $posts = $this->postRepository->getPaginatedWithUserAndCommentsByUsername( $username );
 
         // Show the page.
         //
-        return routeView()->withPosts($posts);
+        return routeView()->withPosts($posts)->withUsername( $username );
     }
 
     /**

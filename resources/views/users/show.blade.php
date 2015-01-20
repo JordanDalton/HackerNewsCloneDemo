@@ -23,8 +23,8 @@
                     <dd>{{ $user->getAverage() }}</dd>
                     <dt>About</dt>
                     <dd>{!! $user->getAbout() !!}</dd>
-                    <dd><a class="underlined" href="#">submissions</a></dd>
-                    <dd><a class="underlined" href="#">comments</a></dd>
+                    <dd><a class="underlined" href="{{ route('posts.submitted', ['username' => $user->getUsername()]) }}">submissions</a></dd>
+                    <dd><a class="underlined" href="{{ route('comments.threads', ['username' => $user->getUsername()]) }}">comments</a></dd>
                 </dl>
             </div>
         </div>

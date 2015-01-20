@@ -1,14 +1,14 @@
 @extends('layouts.default')
 
 @section('page_title')
-    Submitted By Me | @parent
+    Submitted By {{ $username }} | @parent
 @stop
 
 @section('content')
 <div class="container">
 
     <div class="page-header">
-        <h1>Posts <small>Submitted By You</small></h1>
+        <h1>Posts <small>Submitted By {{ $username }}</small></h1>
     </div>
 
     @foreach( $posts as $post )

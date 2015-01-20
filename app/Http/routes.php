@@ -202,10 +202,8 @@ Route::group( [ 'namespace' => 'Posts' ] , function ()
     // Show post that have been submitted by the user.
     //
     Route::get('submitted', [
-        'as'         => 'posts.submitted',
-        'middleware' => [ 'auth' , 'roleGatekeeper' ] ,
-        'uses'       => 'PostsController@submitted' ,
-        'roles'      => [ 'Administrators' , 'Moderators' , 'Users' ]
+        'as'   => 'posts.submitted',
+        'uses' => 'PostsController@submitted' ,
     ]);
 
     // Cast vote towards post.
@@ -243,10 +241,8 @@ Route::group( [ 'namespace' => 'Comments' ] , function ()
     // Show comments that have been submitted by the user.
     //
     Route::get('threads', [
-        'as'         => 'comments.threads',
-        'middleware' => [ 'auth' , 'roleGatekeeper' ] ,
-        'uses'       => 'CommentsController@threads' ,
-        'roles'      => [ 'Administrators' , 'Moderators' , 'Users' ]
+        'as'   => 'comments.threads',
+        'uses' => 'CommentsController@threads' ,
     ]);
 } );
 

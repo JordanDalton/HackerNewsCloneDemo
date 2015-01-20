@@ -103,6 +103,25 @@ class CommentRepository implements CommentRepositoryInterface {
     }
 
     /**
+     * Fetch the latest records and return them in paginated form.
+     *
+     * @param int   $username  The user's username.
+     * @param int   $per_page The number of record to show on each page.
+     * @param array $columns  The columns that we want returned.
+     *
+     * @return Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedNewestWithRepliesByUsername( $username, $per_page = 15 , $columns = [ '*' ] )
+    {
+        $userWhereHas = function( $query ) use( $username )
+        {
+            return $query->whereUsername( $username );
+        };
+
+        return $this->getModel()->with(['post', 'replies', 'user'])->latest()->whereHas('user', $userWhereHas)->paginate( $per_page, $columns );
+    }
+
+    /**
      * Fetch all comments records from the database and return in a paginated collection.
      *
      * @param int   $per_page The number of records you want to be shown on each page.
