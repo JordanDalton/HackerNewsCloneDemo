@@ -29,7 +29,7 @@
             @if( ! Auth::check() )
                 <ul class="nav navbar-nav navbar-right">
                     <li class="{{ isActiveRouteName('auth.login') }}"><a href="{{ route('auth.login') }}"><i class="fa fa-sign-in"></i> login</a></li>
-                    <li class="{{ isActiveRouteName('auth.register') }}"><a href="{{ route('auth.register') }}"><i class="fa fa-arrow-right"></i> Join</a></li>
+                    <li class="{{ isActiveRouteName('auth.register') }}"><a href="{{ route('auth.register') }}"><i class="fa fa-arrow-right"></i> join</a></li>
                 </ul>
             @else
                 <ul class="nav navbar-nav navbar-right">
