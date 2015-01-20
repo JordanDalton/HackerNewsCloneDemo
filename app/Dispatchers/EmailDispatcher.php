@@ -135,13 +135,10 @@ class EmailDispatcher {
 
         // Push the email onto the dispatch queue.
         //
-        /*
         $this->mailQueue->queue( 'emails.auth.email.verification' , $data , function ( $message ) use ( $user )
         {
-            $message->to( $user->email , $user->username )
-                ->subject( 'Thank you for joining ' . config( 'settings.site_name' ) );
+            $message->to( $user->email , $user->username )->subject( 'Thank you for joining ' . config( 'settings.site_name' ) );
         } );
-        */
 
         // Dispatch email notification to all administrators to notify them of the new user.
         //
