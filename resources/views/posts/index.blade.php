@@ -13,7 +13,16 @@
         <h1>Hacker News Clone</h1>
         <p><strong>{{ $site_name }}</strong> is a powerful script that allows you create your own socially driven content website. This script is built on <a href="http://www.laravel.com">Laravel 5</a>, one of the most modern development frameworks in the history of PHP. With this script you can be online and running in a matter of minutes. <br/></p>
         <p>Feel free to try out this demo site which is reset every 15 minutes.</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Buy Now</a> <a class="btn btn-success btn-lg" href="{!! route('features') !!}" role="button">View Features</a></p>
+
+        <p>
+            <form class="pull-left" action='https://www.2checkout.com/checkout/purchase' method='post'>
+                <input type='hidden' name='sid' value='202460720'>
+                <input type='hidden' name='quantity' value='1'>
+                <input type='hidden' name='product_id' value='1'>
+                <input class="btn btn-primary btn-lg" name='submit' type='submit' value='Buy from 2CO' >
+            </form>
+            <a class="btn btn-success btn-lg" href="{!! route('features') !!}" role="button" style="margin-left:10px">View Features</a>
+        </p>
     </div>
 
     @if( ! count($posts) )
